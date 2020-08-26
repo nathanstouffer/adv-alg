@@ -125,28 +125,43 @@ exactly $n-1$ edges.
 
 % ============================================
 
-We must show that that every tree with one or more nodes has exactly $n-1$ edges.
+We must show that every tree with one or more nodes has exactly $n-1$ edges.
+We take a tree to be a connected, undirected graph with no cycles.
 We will show this by using induction. \parspace
-Let's begin with the base case of a tree with a single node.
+Base Case: Let's begin with the base case of a tree with a single node.
 Such a tree has no edges.
 Does our claim hold?
-Certainly, $n-1 = 1-1 = 0$.
+Certainly: $n-1 = 1-1 = 0$.
 So the base case is proved. \parspace
-blah
+Inductive assumption: We now assume that there exists some $k \in \N$ such that every tree with $k$ nodes has $k-1$ edges. \parspace
+Inductive step: Now can we show that every tree with $k+1$ nodes has $k$ edges?
+Let's begin with a tree $T_k$ with $k$ nodes.
+From our inductive assumption, we know that $T_k$ has $k-1$ edges.
+We then add one node to $T_k$ to form $T_{k+1}$. \parspace
+When adding node $k+1$, we are constrained to add exactly one edge.
+We must add a non-zero number of edges because $T_{k+1}$ must be connected.
+But we cannot add more than one ege since $T_k$ is connected and adding more than one edge would form a cycle, meaning $T_{k+1}$ would not be a tree.
+So we can only add one edge when constructing $T_{k+1}$.
+So $T_{k+1}$ must have $k-1+1=k$ edges, which is what we needed to show in the inductive step. \parspace
+Thus, by induction, we have shown that every tree with one or more nodes must have exactly $n-1$ edges.
 
 % ============================================
 
 
 
 \nextprob
-Use the definition of big-O notation to prove that $f(x)=n^2 + 3n +2$ is
+Use the definition of big-O notation to prove that $f(n)=n^2 + 3n +2$ is
 $O(n^2)$.
 
 \paragraph{Answer}
 
 % ============================================
 
-TODO: your answer goes between these lines
+To show that $f(n) = n^2 + 3n + 2 = O(n^2)$, we must show the existence of $n_0 \in \N$ and $c \in \R$ with $ c > 0$ such that $f(n) \leq c n^2$  for all $n \geq n_0$.
+Towards finding such constants, we observe that
+$$ f(n) = n^2 + 3n + 2 \leq n^2 + 3n^2 + 2n^2 = 6n^2 \hspace{1em} \forall n \in \N $$
+We choose $n_0 = 1$ and $c = 6$.
+Thus, $f(n) = n^2 + 3n + 2 $ is $O(n^2)$.
 
 % ============================================
 
@@ -165,7 +180,17 @@ Consider the \textsc{RightAngle} algorithm on page 8 of the textbook.
 
 % ============================================
 
-TODO: your answer goes between these lines
+\begin{enumerate}
+    \item Given a line $l$ and a point $p \in l$, the \textsc{RightAngle} algorithm draws a line that passes through $p$ and is perpendicular to $l$.
+    \item We must now show that \textsc{RightAngle} terminates.
+    I found that \textsc{RightAngle} terminates in all but one case. \parspace
+    Case $A \neq P$: In this case, \textsc{RightAngle} terminates if each of its steps terminates.
+    Steps one certainly terminates since it just a selection of a point on a line.
+    Step two terminates because $P \neq A$ so \textsc{Circle(P,A)} can be drawn and there are two intersection points with $l$.
+    Step three terminates since both circles can be drawn and they have two intersection points (because they are circles of radius $r$ with distance between centers of $r$).
+    Step four terminates because drawing a line between two distinct points is always possible. \parspace
+    Case $A = P$: This case cannot terminate because \textsc{Circle(P,P)} cannot be drawn.
+\end{enumerate}
 
 % ============================================
 
