@@ -5,7 +5,7 @@
 %% UPDATE these variables:
 \renewcommand{\hwnum}{2}
 \title{Advanced Algorithms, Homework \hwnum}
-\author{Nathan Stouffer}
+\author{Nathan Stouffer \and Kevin Browder}
 \collab{n/a}
 \date{due: 3 September 2020}
 
@@ -14,7 +14,7 @@
 \maketitle
 
 \nextprob
-\collab{TODO}
+\collab{Nathan Stouffer and Kevin Browder}
 
 In this class, we will assign groups for the group project.  Now is your chance
 to weigh in on how we choose them!
@@ -33,12 +33,29 @@ to weigh in on how we choose them!
 
 % ============================================
 
-TODO: your answer goes between these lines
+\begin{enumerate}
+	\item The input is an unsorted list of students, the output is a two dimensional list of students with the first dimension being the number of groups $\lceil n/3 \rceil$ and the second dimension being the number of students in each group (3). We then need to assign each student to a group. Not all groups may be of size 3, some may be smaller if $n \neq 0 \mod 3$
+	\item We propose a fairly simple algorithm. First we create a 2 dimensional list with length $\lceil n/3 \rceil$. If this number is not an integer we round up and will make a group of less than three. Next we will randomly scramble the input array of students. We will then iterate through the input array. The first student will be added to the first index in the 2 dimensional list. We will then increment to the second index and so on until we reach the end. We will then reset and begin at the beginning of the list again. The results of a class with 8 students would look like $\{\{***\},\{***\},\{**\}\}$ and everything will be choosen randomly.
+	\item Here is the algorithm in psuedocode.
+	\begin{algorithm}
+    	1. Assign(A[1..n]) \\
+    	2. \hspace{2em}	A = RandomShuffle(A) \\
+    	3. \hspace{2em}	int groups = $\lceil n/3 \rceil$ \\
+    	4. \hspace{2em}	groups = list[][] \\
+    	5. \hspace{2em}	location = 0 \\
+    	6. \hspace{2em}	for i in A.length \\
+    	7. \hspace{4em}	list[location].add(i) \\
+    	8.\hspace{4em}		location++ \\
+    	9.\hspace{2em}		if (location == groups) \\
+    	10.\hspace{4em}			location = 0
+    \end{algorithm}
+	\item This algorithm at its most basic level only iterates through the array of students. An array cannot be infinite because each index in an array is assigned to a memory location. There is no such thing as infinite memory so therefore the length of an array is finite. Since we are only iterating over a finite array once. The algorithm must terminate.
+\end{enumerate}
 
 % ============================================
 
 \nextprob
-\collab{TODO}
+\collab{Nathan Stouffer and Kevin Browder}
 
 Chapter 1, Problem 37 (Largest Complete Subtree).
 
@@ -61,13 +78,46 @@ Your algorithm should return both the root and the depth of this subtree.
 
 % ============================================
 
-TODO: your answer goes between these lines
+\begin{enumerate}
+	\item The problem is to find the largest subtree of a binary graph recursively. The input of the algorithm is a binary tree and the output should be a subtree which is in the format of the root and the depth of the subtree.
+	\item The algorithm I propose is to do a post order traversal over very node $n$ in the binary tree. At each node then recursively compute the depth of the sub tree on both the left and right side by counting the number of nodes down that have two children. Then take the smaller returned depth and add 1 (for the root node $n$). This is the depth of subtree. Keep track of the depths for each node as you do the post order traversal. Once you are finished simply choose the largest depth and return the depth and node.
+	\item We now give the algorithm in psuedocode.
+	\begin{algorithm}
+    	1. Depth(n): \\
+    	2. \hspace{2em} if (right(n) == null or left(n) == null) \\
+    	3. \hspace{4em}		return -1 \\
+    	4. \hspace{2em}	else \\
+    	5. \hspace{4em}		RD = Depth(right(n)) // right child \\
+    	6. \hspace{4em}		LD = Depth(left(n)) // left child \\
+    	7. \hspace{4em}		return min\{LD, RD\} + 1  \\
 
+    	1. LST(T): \\
+    	2. \hspace{2em}	maxRoot = 0 \\
+    	3. \hspace{2em}	maxDepth = 0 \\
+    	4. \hspace{2em}	post order traverse of $n$'s in T: \\
+    	5. \hspace{4em}		if right(n) == null or left(n) == null \\
+    	6. \hspace{6em}			depth(n) = 0 \\
+    	7. \hspace{4em}		else \\
+    	8. \hspace{6em}			depth = min\{CD(right(T), CD(left(T)))\} + 1 \\
+    	9. \hspace{6em}			if depth $>$ maxDepth \\
+    	10.\hspace{8em}				maxDepth = depth \\
+    	11.\hspace{8em}				maxRoot = n
+    \end{algorithm}
+    \newpage
+	\item For time complexity, the post order traversal will take O(n) because it has to traverse over every node. The depth function will never have to traverse the full tree so the time complexity for the algorithm is O(n).
+    \item First we set up the recursive invariant: The initialization step is checking if the parent node has children.
+    The maintenance step is checking if both children have two children.
+    This means that every time we make the recursive call the subtree is broken into two smaller subtrees.
+    Using induction, we have the base case of either child is null.
+    Our inductive hypothesis: We assume that the recursive invariant holds true for all previous recursive steps.
+    As our inductive step, since we assume the inductive hypothesis, we need only check if both children have children.
+    So, by induction, we have proven that the algorithm is correct.
+\end{enumerate}
 % ============================================
 
 
 \nextprob
-\collab{TODO}
+\collab{Nathan Stouffer and Kevin Browder}
 
 Chapter 1, Problem 9 (Pancakes). When describing your algorithm, please give a
 prose explanation (in paragraph form) as well as in the algorithm environment.
@@ -97,13 +147,37 @@ The only operation you can perform is a flip—insert a spatula under the top $k
     Our goal is to produce $1,2,3,..., n$ as output using only the flip operation $O(n)$ times. \parspace
     Our algorithm first identifies the largest number $k$ that is out of place, say $k$ is $i$ pancakes from the top.
     Then we flip the top $i$ pancakes so that $k$ is on top.
-    At this point, we flip the top $k$ pancakes to put $k$ in the correct spot in the stack. \parspace
+    At this point, we flip the top $k$ pancakes to put $k$ in the correct spot in the stack.
+    We then repeat this process for every $k$. \parspace
     We now give the pseudocode for this algorithm.
+    Note that for $a \in \N$, IndexOf($a$) returns the index referencing the value $a$ and Flip($a$) inserts the spatula at the $a^{th}$ pancake from the top and flips the stack.
     \begin{algorithm}
-        stuff
-    \end{algorithm}
-    \item
-    \item
+        SortPancakes(order[$1..n$])                         \\
+        1. for $k \leftarrow n$ to $2$                      \\
+        2. \hspace{2em} $i \leftarrow $ IndexOf($k$)        \\
+        3. \hspace{2em} if $i < k$                          \\
+        4. \hspace{4em} Flip($i$)                           \\
+        5. \hspace{4em} Flip($k$)
+    \end{algorithm} \\
+    In the very worst case, we must execute the flip operation twice every time the for loop runs: we must flip $2*(n-1)$ times.
+    \item To make sure that the algorithm runs in $\Omega (n)$ flips, we construct a starting state so that every pair of consecutive pancakes should not end up as consecutive pancakes in the final state.
+    \item We now devise an algorithm to also ensure that the burned side of a pancake is face down.
+    We first identify the largest number $k$ that is out of place and record its index $i$.
+    Then we flip the top $i$ pancakes.
+    If the burned side is not up, we flip the top pancake.
+    After that, flip the top $k$ pancakes.
+    We then repeat this process for every $k$. \parspace
+    We introduce the function BurnedUp($a$) for $a \in \N$ which returns $True$ if the $a^{th}$ pancake's burned side is facing up and $False$ if the $a^{th}$ pancake's burned side is facing down.
+    \begin{algorithm}
+        SortBurnedPancakes(order[$1..n$])                   \\
+        1. for $k \leftarrow n$ to $1$                      \\
+        2. \hspace{2em} $i \leftarrow $ IndexOf($k$)        \\
+        3. \hspace{2em} Flip($i$)                           \\
+        4. \hspace{2em} if not $BurnedUp(1)$                \\
+        5. \hspace{4em}     Flip(1)                         \\
+        6. \hspace{2em} Flip($k$)
+    \end{algorithm} \\
+    In the worst case, we must execute the flip operation three times every time the loop runs: $3*n$.
 \end{enumerate}
 
 % ============================================
