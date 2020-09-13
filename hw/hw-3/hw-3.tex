@@ -1,0 +1,209 @@
+\documentclass{article}
+\usepackage{../fasy-hw}
+\usepackage{ wasysym }
+
+%% UPDATE these variables:
+\renewcommand{\hwnum}{3}
+\title{Advanced Algorithms, Homework \hwnum}
+\author{Nathan Stouffer \and Kevin Browder}
+\collab{n/a}
+\date{due: 17 September 2020}
+
+\begin{document}
+
+\maketitle
+
+This homework assignment is due on 3 September 2020, and should be
+submitted as a single PDF file to to Gradescope.
+
+General homework expectations:
+\begin{itemize}
+    \item Homework should be typeset using LaTex.
+    \item Answers should be in complete sentences and proofread.
+    \item This homework can be submitted as a group.
+\end{itemize}
+
+\nextprob
+\collab{Nathan Stouffer and Kevin Browder}
+
+Work in a group of size $\geq 2$.  Explain your strategy for working in a group.
+
+\paragraph{Answer}
+
+% ============================================
+
+TODO: your answer goes between these lines
+
+% ============================================
+
+\nextprob
+\collab{Nathan Stouffer and Kevin Browder}
+
+Your group should make at least five contributions to the Piazza board.  A
+contribution can be either asking a relevant question, responding to another
+student's question, responding to an instructor's question, or choosing a
+question from Chapter 1 and attempting to solve it, then  describing where you
+get stuck in answering it.
+
+\paragraph{Answer}
+
+% ============================================
+
+Our groups contributions are:
+\begin{enumerate}
+    \item (TODO: state the problem number, name of poster, and date/time). TODO:
+        copy the post here.
+    \item (TODO: state the problem number, name of poster, and date/time). TODO:
+        copy the post here.
+    \item (TODO: state the problem number, name of poster, and date/time). TODO:
+        copy the post here.
+    \item (TODO: state the problem number, name of poster, and date/time). TODO:
+        copy the post here.
+    \item (TODO: state the problem number, name of poster, and date/time). TODO:
+        copy the post here.
+\end{enumerate}
+
+% ============================================
+
+\nextprob
+\collab{Nathan Stouffer and Kevin Browder}
+
+Give the algorithm for binary search, using a for loop and no recursion.
+
+\begin{enumerate}
+    \item Describe the problem in your own words, including
+        describing what the input and output is.
+    \item Describe, in paragraph form, the algorithm you propose.
+    \item Provide this algorithm in the algorithm environment.
+    \item Use a decrementing function to prove that the loop terminates.
+    \item What is the loop invariant? Provide the proof.
+\end{enumerate}
+
+\paragraph{Answer}
+
+% ============================================
+
+TODO: your answer goes between these lines
+
+% ============================================
+
+\nextprob
+\collab{Nathan Stouffer and Kevin Browder}
+
+Chapter 2, Problem 1b (Generalized \textsc{SubsetSum}).
+\begin{enumerate}
+    \item Describe the problem in your own words, including
+        describing what the input and output is.
+    \item Describe, in paragraph form, the algorithm you propose.
+    \item Provide this algorithm in the algorithm environment.
+    \item What is the runtime of your algorithm?
+    \item Prove partial correctness (that if your algorithm terminates, it is
+        correct).
+\end{enumerate}
+
+
+
+\paragraph{Answer}
+
+% ============================================
+
+TODO: your answer goes between these lines
+
+% ============================================
+
+
+
+\nextprob
+\collab{Nathan Stouffer and Kevin Browder}
+
+Describe two different data structures that you can use to store a graph.
+Please give a complete description (i.e., a response of ``an array'' will not
+suffice).
+
+\paragraph{Answer}
+
+% ============================================
+
+TODO: your answer goes between these lines
+
+% ============================================
+
+
+\nextprob
+\collab{Nathan Stouffer and Kevin Browder}
+
+Walk through the exponential time Longest Increasing Subsequence (LIS) algorithm
+on page 108 for the input: $\left[ 1, 7, 6, 11, 3, 11 \right]$.
+
+Walk through the algorithm using the Dynamic Programming algorithm present in
+Section 3.6.
+
+\paragraph{Answer}
+
+% ============================================
+
+TODO: your answer goes between these lines
+
+% ============================================
+
+\nextprob
+\collab{Nathan Stouffer and Kevin Browder}
+
+What is the closed form of the following recurrence relations?  Use Master's
+theorem to justify your answers:
+\begin{enumerate}
+    \item $T(n) = 16 T(n/4) + \Theta(n)$
+    \item $T(n) = 2 T(n/2) + n \log{n}$
+    \item $T(n) = 6 T(n/3) + n^2 \log{n}$
+    \item $T(n) = 4 T(n/2) + n^2$
+    \item $T(n) = 9 T(n/3) + n$
+\end{enumerate}
+Note: we assume that $T(1)=\Theta(1)$ whenever it is not explicitly given.
+
+\paragraph{Answer}
+
+% ============================================
+
+TODO: your answer goes between these lines
+
+% ============================================
+
+\nextprob
+\collab{Nathan Stouffer and Kevin Browder}
+
+\emph{The skyline problem:} You are in Camden, NJ waiting for the ferry across the river to
+get into Philadelphia, and are looking at the skyline.  You take a photo, and notice that each building
+has the silhouette of a rectangle.  Suppose you  represent each building $b$ as a
+triple $(x_b^{(1)},x_b^{(2)},y_b)$, where the building can be seen from $x_b^{(1)}$ to $x_b^{(2)}$
+horizontally and has a height of $y_b$.  Let $\mathtt{rect(b)}$ be the set of
+points inside this rectangle (including the boundary).  Let $\mathtt{buildings}$
+be a set of $n$ such triples representing buildings. Design an algorithm that takes $\mathtt{buildings}$ as input, and
+returns the skyline, where the skyline is a sequence of~$(x,y)$ coordinates
+defining $\cup_{b \in \mathtt{buildings}} \mathtt{rect}(b)$.  The output should
+start with $(\min_b{x_b^{(1)}},0)$ and end with $(\max_b{x_b^{(1)}},0)$.
+
+\begin{enumerate}
+    \item Describe the problem in your own words, including
+        describing what the input and output is.
+    \item Describe, in paragraph form, the algorithm you propose.
+    \item Provide this algorithm in the algorithm environment.
+    \item What is the runtime of your algorithm? If you do not know, either give
+        the tightest bounds you know, or provide a decrementing function to show
+        that it does terminate.
+    \item Prove partial correctness (that if your algorithm terminates, it is
+        correct).
+\end{enumerate}
+
+
+
+\paragraph{Answer}
+
+% ============================================
+
+TODO: your answer goes between these lines
+
+% ============================================
+
+
+
+\end{document}
