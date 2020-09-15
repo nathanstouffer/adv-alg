@@ -62,6 +62,14 @@ Our groups contributions are:
         copy the post here.
 \end{enumerate}
 
+Problem number 3-3 (hw 3), Poster: Nathan Stouffer, Date: 9/15/2020 9:34 am
+Hello everyone,
+
+Some languages (like java, c, c++ ...) allow any boolean condition to be a test for whether the loop should continue running and also allow any incrementing function. However, the examples that I have seen in this class seem to have a for loop running over a set of integers. Does the real-ram model allow for for loops that have a condition like end > beg with some specified incrementing function?
+
+The reason I ask is because of hw problem 3-3. The question asks that we write an algorithm for binary search using a for loop instead of recursion. If we must run over a set of integers, we can compute an upper bound on how many iterations the for loop will run so it is possible to create a correct for loop. I also think proving termination would be easier when running over a set of integers. However, the first option would be able to exit the for-loop before reaching the upper bound of iterations. This would not improve worst case run time but it would affect the average case run time. Let me know what we are allowed to do with this model of computation.
+
+Another idea would be to break out the loop if a certain condition is true. Is this allowable with our model of computation?
 % ============================================
 
 \nextprob
@@ -70,8 +78,7 @@ Our groups contributions are:
 Give the algorithm for binary search, using a for loop and no recursion.
 
 \begin{enumerate}
-    \item Describe the problem in your own words, including
-        describing what the input and output is.
+    \item Describe the problem in your own words, including describing what the input and output is.
     \item Describe, in paragraph form, the algorithm you propose.
     \item Provide this algorithm in the algorithm environment.
     \item Use a decrementing function to prove that the loop terminates.
@@ -82,7 +89,31 @@ Give the algorithm for binary search, using a for loop and no recursion.
 
 % ============================================
 
-TODO: your answer goes between these lines
+\begin{enumerate}
+    \item The problem that binary search solves is returning the location of a target value in an array.
+    The input to the problem must be a sorted array of comparable items paired with a target value of the same type.
+    The output will either by the index of the target value or -1 to flag that the target is not in the array.
+    \item
+    \item Here is the algorithm.
+    \begin{algorithm}
+    	\textsc{BinarySearch}(A[1..n], targ) \\
+    	1.  \hspace{0em}   beg $\leftarrow$ 1 \\
+    	2.  \hspace{0em}   end $\leftarrow n$ \\
+        3.  \hspace{0em}   indx $\leftarrow$ -1 // assume value is not in array \\
+    	4.  \hspace{0em}   for $1.. \lceil log_2(len(A)) \rceil$ \\
+    	5.  \hspace{2em}       mid $\leftarrow \lfloor (\text{beg}+\text{end})/2 \rfloor$ \\
+    	6.  \hspace{2em}	   if (A[mid] = targ) \\
+    	7.  \hspace{4em}	       indx $\leftarrow$ mid \\
+    	8.  \hspace{2em}	   if (A[mid] $>$ targ) \\
+    	9.  \hspace{4em}		   end $\leftarrow$ mid - 1 \\
+    	10. \hspace{2em}	   if (A[mid] $<$ targ) \\
+        11. \hspace{4em}        beg $\leftarrow$ mid + 1 \\
+        12. \hspace{0em} return indx
+    \end{algorithm}
+    \item prove termination
+    \item Our loop invariant is that $arr[beg] < targ < arr[end]$.
+
+\end{enumerate}
 
 % ============================================
 
@@ -101,12 +132,51 @@ Chapter 2, Problem 1b (Generalized \textsc{SubsetSum}).
 \end{enumerate}
 
 
-
 \paragraph{Answer}
 
 % ============================================
 
-TODO: your answer goes between these lines
+\begin{enumerate}
+    \item For the Generalized \textsc{SubsetSum} problem, our input has two parts.
+    First, we have two equally sized arrays $X$ and $W$ containing positive integers paired with another positive integer $T$.
+    Each value of $X$ has a corresponding weight in $W$ that can be found at the same index (ie weight for $X[i]$ can be found at $W[i]$).
+    The second part of the input is an array called $I$ (which has length $len(X)$ and begins consisting entirely of 0s) paired with an index $i$ (which starts at 1).
+    If it exists, our task is to find the subset of $X$ that sums to $T$ with the heaviest weight.
+    If no subset of $X$ sums to $T$, we will return $-\infty$.
+    Our output will either be $-\infty$ or a positve integer (the weight of the heaviest subset that sums to $T$).
+    \item algorithm description \\
+    The array $I$ contains activations for whether to include the $i^{th}$ element of $X$ in the subset (0 means don't include, 1 means include).
+    The index i denotes the first index of $I$ that has not been yet been called.
+    \item Here is the algorithm.
+    \begin{algorithm}
+        \textsc{SubsetSum}$(X, W, T, I, i)$ \\
+        1.  \hspace{0em} if (\textsc{Sum}$(X, I) > T$) \\
+        2.  \hspace{2em}     return $-\infty$ \\
+        3.  \hspace{0em} if (\textsc{Sum}$(X, I) = T$) \\
+        4.  \hspace{2em}     return \textsc{Weight}($W, I$) \\
+        5.  \hspace{0em} skip $\leftarrow$ \textsc{SubsetSum}($X, W, T, I, i+1$) \\
+        6.  \hspace{0em} $I[i] \leftarrow 1$ \\
+        7.  \hspace{0em} take $\leftarrow$ \textsc{SubsetSum}($X, W, T, I, i+1$) \\
+        8.  \hspace{0em} return max(skip, take) \\
+
+        \textsc{Sum}(X, I) \\
+        1.  \hspace{0em} sum $\leftarrow$ 0 \\
+        2.  \hspace{0em} for i in 1..len(X) \\
+        3.  \hspace{2em}     sum $\leftarrow$ sum + $X[i]*include[i]$ \\
+        4.  \hspace{0em} return sum \\
+
+        \textsc{Weight}(W, I) \\
+        1.  \hspace{0em} weight $\leftarrow$ 0 \\
+        2.  \hspace{0em} for i in 1..len(W) \\
+        3.  \hspace{2em}     weight $\leftarrow$ weight + $W[i]*include[i]$ \\
+        4.  \hspace{0em} return weight
+    \end{algorithm}
+    \newpage
+    \item Towards giving the runtime of our algorithm, we start by giving the run times of \textsc{Sum} and \textsc{Weight}.
+    Let $n$ be the length of $X$ (which matches the lengths of $W$ and $I$).
+    Both \textsc{Sum} and \textsc{Weight} run in $\Theta(n)$ (since they have constant time operations that run $n$ times).
+    Now we give the worst case recurrence relation for \textsc{SubsetSeum}: $T(n) = \Theta(n) + \Theta(n) + T(n-1) + O(1) + T(n-1) = 2*T(n-1) + \Theta(n)$.
+\end{enumerate}
 
 % ============================================
 
