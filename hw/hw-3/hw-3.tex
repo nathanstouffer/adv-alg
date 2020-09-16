@@ -1,4 +1,4 @@
-separately\documentclass{article}
+\documentclass{article}
 \usepackage{../fasy-hw}
 \usepackage{ wasysym }
 
@@ -13,16 +13,6 @@ separately\documentclass{article}
 
 \maketitle
 
-This homework assignment is due on 3 September 2020, and should be
-submitted as a single PDF file to to Gradescope.
-
-General homework expectations:
-\begin{itemize}
-    \item Homework should be typeset using LaTex.
-    \item Answers should be in complete sentences and proofread.
-    \item This homework can be submitted as a group.
-\end{itemize}
-
 \nextprob
 \collab{Nathan Stouffer and Kevin Browder}
 
@@ -32,7 +22,7 @@ Work in a group of size $\geq 2$.  Explain your strategy for working in a group.
 
 % ============================================
 
-Our strategy for working in a group: we meet early in the week and work over the problems on scratch paper very informally. Doing this early will give us some extra time if there are any very difficult/time consuming problems Once we are satisfied with our work we do the LaTeX separately on our own time and use Git to collaborate on it. We then meet again before the assignment is due and go over the finished document and make sure everything looks good and we didn't make any mistakes when doing the LaTeX. 
+Our strategy for working in a group: we meet early in the week and work over the problems on scratch paper very informally. Doing this early will give us some extra time if there are any very difficult/time consuming problems Once we are satisfied with our work we do the LaTeX separately on our own time and use Git to collaborate on it. We then meet again before the assignment is due and go over the finished document and make sure everything looks good and we didn't make any mistakes when doing the LaTeX.
 
 % ============================================
 
@@ -51,25 +41,48 @@ get stuck in answering it.
 
 Our groups contributions are:
 \begin{enumerate}
-    \item (3-4, Kevin Browder, and 7:13-9/14/2020). As we learned in CS Theory a subset sum problem, which doesn't have a weight array is NP-Complete. Does the weight component of this problem change that? We think that it does because computing a maximum seems like it requires computing all the options to know for sure that we have the maximum.
-    \item (TODO: state the problem number, name of poster, and date/time). TODO:
+    \item (3-4, Kevin Browder, and 7:13pm-9/14/2020).
+
+    As we learned in CS Theory a subset sum problem, which doesn't have a weight array is NP-Complete. Does the weight component of this problem change that? We think that it does because computing a maximum seems like it requires computing all the options to know for sure that we have the maximum.
+    \item (3-3, Nathan Stouffer, 9:34am-9/15/2020).
+
+    Hello everyone,
+
+    Some languages (like java, c, c++ ...) allow any boolean condition to be a test for whether the loop should continue running and also allow any incrementing function. However, the examples that I have seen in this class seem to have a for loop running over a set of integers. Does the real-ram model allow for for loops that have a condition like end > beg with some specified incrementing function?
+
+    The reason I ask is because of hw problem 3-3. The question asks that we write an algorithm for binary search using a for loop instead of recursion. If we must run over a set of integers, we can compute an upper bound on how many iterations the for loop will run so it is possible to create a correct for loop. I also think proving termination would be easier when running over a set of integers. However, the first option would be able to exit the for-loop before reaching the upper bound of iterations. This would not improve worst case run time but it would affect the average case run time. Let me know what we are allowed to do with this model of computation.
+
+    Another idea would be to break out the loop if a certain condition is true. Is this allowable with our model of computation?
+
+    \item (Problem 3-4 (response to a question from Dr. Fasy), Nathan Stouffer, and 10:30-9/15/2020). TODO:
         copy the post here.
-    \item (TODO: state the problem number, name of poster, and date/time). TODO:
-        copy the post here.
+
+        I can see how an answer to W would provide an answer to S. If we set all the weights equal to 0, then W is pretty much just S because we only need to find one subset of X that sums to T and it is guaranteed to be the maximum weight. So I agree that W is at least as difficult as S.
+
+        If I remember things correctly, to show that W is NP-C, we would then want to show that W is a member of NP. In the theory course, that meant giving some Nondeterministic Polynomial Decider for W. But that was when everything was a decision problem. I'm not sure how things change when we switch to the real-ram model/are trying to optimize something. If giving some nondeterministic polynomial machine that solve W suffices to show that W is a member of NP, then the following machines might do that. \\
+
+        SUBSETWEIGHT: \\
+        Suppose we are given X, W, T.\\
+        1. nondeterministically choose X' a subset of X\\
+        2. if (sum the values of X' equals T)\\
+        3.     weight = weight of X'\\
+        4.     return weight\\
+        5. else\\
+        6.     return -inf\\
+
+        MAXSUBSETWEIGHT:\\
+        Suppose we are given X, W, T\\
+        1. weights = SUBSETWEIGHT(X, W, T)\\
+        2. return max { weights }\\
+
+        I'm not really sure if all of this is allowable/fits under the span of the real-ram model. But it's what came to mind.
+
     \item (TODO: state the problem number, name of poster, and date/time). TODO:
         copy the post here.
     \item (TODO: state the problem number, name of poster, and date/time). TODO:
         copy the post here.
 \end{enumerate}
 
-Problem number 3-3 (hw 3), Poster: Nathan Stouffer, Date: 9/15/2020 9:34 am
-Hello everyone,
-
-Some languages (like java, c, c++ ...) allow any boolean condition to be a test for whether the loop should continue running and also allow any incrementing function. However, the examples that I have seen in this class seem to have a for loop running over a set of integers. Does the real-ram model allow for for loops that have a condition like end > beg with some specified incrementing function?
-
-The reason I ask is because of hw problem 3-3. The question asks that we write an algorithm for binary search using a for loop instead of recursion. If we must run over a set of integers, we can compute an upper bound on how many iterations the for loop will run so it is possible to create a correct for loop. I also think proving termination would be easier when running over a set of integers. However, the first option would be able to exit the for-loop before reaching the upper bound of iterations. This would not improve worst case run time but it would affect the average case run time. Let me know what we are allowed to do with this model of computation.
-
-Another idea would be to break out the loop if a certain condition is true. Is this allowable with our model of computation?
 % ============================================
 
 \nextprob
@@ -150,32 +163,35 @@ Chapter 2, Problem 1b (Generalized \textsc{SubsetSum}).
     \item Here is the algorithm.
     \begin{algorithm}
         \textsc{SubsetSum}$(X, W, T, I, i)$ \\
-        1.  \hspace{0em} if (\textsc{Sum}$(X, I) > T$) \\
+        1.  \hspace{0em} if ($i > len(I)$) \\
         2.  \hspace{2em}     return $-\infty$ \\
-        3.  \hspace{0em} if (\textsc{Sum}$(X, I) = T$) \\
-        4.  \hspace{2em}     return \textsc{Weight}($W, I$) \\
-        5.  \hspace{0em} skip $\leftarrow$ \textsc{SubsetSum}($X, W, T, I, i+1$) \\
-        6.  \hspace{0em} $I[i] \leftarrow 1$ \\
-        7.  \hspace{0em} take $\leftarrow$ \textsc{SubsetSum}($X, W, T, I, i+1$) \\
-        8.  \hspace{0em} return max(skip, take) \\
+        3.  \hspace{0em} if (\textsc{Sum}$(X, I) > T$) \\
+        4.  \hspace{2em}     return $-\infty$ \\
+        5.  \hspace{0em} if (\textsc{Sum}$(X, I) = T$) \\
+        6.  \hspace{2em}     return \textsc{Weight}($W, I$) \\
+        7.  \hspace{0em} skip $\leftarrow$ \textsc{SubsetSum}($X, W, T, I, i+1$) \\
+        8.  \hspace{0em} $I[i] \leftarrow 1$ \\
+        9.  \hspace{0em} take $\leftarrow$ \textsc{SubsetSum}($X, W, T, I, i+1$) \\
+        10. \hspace{0em} return max(skip, take) \\
 
         \textsc{Sum}(X, I) \\
         1.  \hspace{0em} sum $\leftarrow$ 0 \\
         2.  \hspace{0em} for i in 1..len(X) \\
-        3.  \hspace{2em}     sum $\leftarrow$ sum + $X[i]*include[i]$ \\
+        3.  \hspace{2em}     sum $\leftarrow$ sum + $X[i]*I[i]$ \\
         4.  \hspace{0em} return sum \\
 
         \textsc{Weight}(W, I) \\
         1.  \hspace{0em} weight $\leftarrow$ 0 \\
         2.  \hspace{0em} for i in 1..len(W) \\
-        3.  \hspace{2em}     weight $\leftarrow$ weight + $W[i]*include[i]$ \\
+        3.  \hspace{2em}     weight $\leftarrow$ weight + $W[i]*I[i]$ \\
         4.  \hspace{0em} return weight
     \end{algorithm}
     \newpage
     \item Towards giving the runtime of our algorithm, we start by giving the run times of \textsc{Sum} and \textsc{Weight}.
     Let $n$ be the length of $X$ (which matches the lengths of $W$ and $I$).
     Both \textsc{Sum} and \textsc{Weight} run in $\Theta(n)$ (since they have constant time operations that run $n$ times).
-    Now we give the worst case recurrence relation for \textsc{SubsetSeum}: $T(n) = \Theta(n) + \Theta(n) + T(n-1) + O(1) + T(n-1) = 2*T(n-1) + \Theta(n)$.
+    Now we give the worst case recurrence relation for \textsc{SubsetSum}: $T(n) = \Theta(n) + \Theta(n) + T(n-1) + O(1) + T(n-1) = 2*T(n-1) + \Theta(n)$.
+    We can then say that $T(n) = O(2^n)$.
 \end{enumerate}
 
 % ============================================
