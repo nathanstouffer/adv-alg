@@ -1,4 +1,4 @@
-separately\documentclass{article}
+\documentclass{article}
 \usepackage{../fasy-hw}
 \usepackage{ wasysym }
 
@@ -193,7 +193,43 @@ suffice).
 
 % ============================================
 
-TODO: your answer goes between these lines
+\begin{enumerate}
+	\item Array: Use a two dimensional array of nodes to create an adjacency matrix. Edges are represented by non-zero values in the array. The size of the matrix is a square where the width and height are the number of nodes. \\
+	Example: 0--1--2\\
+	Adjacency Matrix:\\
+	$\{\{0, 1, 0\}\\$
+	$\{1, 0, 1\}\\$
+	$\{0, 1, 0\}\}\\$
+	
+	\item Adjacency List: Use an array of lists where each index of the array is a vertex. At each index in the array (array[i]) there is a list of nodes that are adjacent to the ith node. \\
+	Example: 0--1--2\\
+	$\{[1],$\\
+	$[[0],[2]],$\\
+	$[1]\}$\\
+	
+	\item Relational Database: Have a node table and an edge table. The node table has a node ID and the edges table consists of two rows, A and B. Which contain the start and end node ID's of an edge respectively. This works best for directed graphs.
+	Example: 0--1--2\\
+	
+	\begin{table}[H]
+		\begin{tabular}{|l|l|l|}
+			\hline
+			ID & Name   & Feature \\ \hline
+			0  & Node 0 & A       \\ \hline
+			1  & Node 1 & A       \\ \hline
+			2  & Node 2 & B       \\ \hline
+		\end{tabular}
+	\end{table}
+	\begin{table}[H]
+		\begin{tabular}{|l|l|}
+			\hline
+			A & B \\ \hline
+			0 & 1 \\ \hline
+			1 & 0 \\ \hline
+			1 & 2 \\ \hline
+			2 & 1 \\ \hline
+		\end{tabular}
+	\end{table} 
+\end{enumerate}
 
 % ============================================
 
@@ -205,7 +241,7 @@ Walk through the exponential time Longest Increasing Subsequence (LIS) algorithm
 on page 108 for the input: $\left[ 1, 7, 6, 11, 3, 11 \right]$.
 
 Walk through the algorithm using the Dynamic Programming algorithm present in
-Section 3.6.
+Section 3.6.1
 
 \paragraph{Answer}
 
