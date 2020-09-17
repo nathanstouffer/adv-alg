@@ -216,16 +216,16 @@ suffice).
 	$\{\{0, 1, 0\}\\$
 	$\{1, 0, 1\}\\$
 	$\{0, 1, 0\}\}\\$
-	
+
 	\item Adjacency List: Use an array of lists where each index of the array is a vertex. At each index in the array (array[i]) there is a list of nodes that are adjacent to the ith node. \\
 	Example: 0--1--2\\
 	$\{[1],$\\
 	$[[0],[2]],$\\
 	$[1]\}$\\
-	
+
 	\item Relational Database: Have a node table and an edge table. The node table has a node ID and the edges table consists of two rows, A and B. Which contain the start and end node ID's of an edge respectively. This works best for directed graphs.
 	Example: 0--1--2\\
-	
+
 	\begin{table}[H]
 		\begin{tabular}{|l|l|l|}
 			\hline
@@ -244,7 +244,7 @@ suffice).
 			1 & 2 \\ \hline
 			2 & 1 \\ \hline
 		\end{tabular}
-	\end{table} 
+	\end{table}
 \end{enumerate}
 
 % ============================================
@@ -270,7 +270,7 @@ TODO: your answer goes between these lines
 \nextprob
 \collab{Nathan Stouffer and Kevin Browder}
 
-What is the closed form of the following recurrence relations?  Use Master's
+What is the closed form of the following recurrence relations?  Use the master
 theorem to justify your answers:
 \begin{enumerate}
     \item $T(n) = 16 T(n/4) + \Theta(n)$
@@ -285,7 +285,52 @@ Note: we assume that $T(1)=\Theta(1)$ whenever it is not explicitly given.
 
 % ============================================
 
-TODO: your answer goes between these lines
+\begin{enumerate}
+    \item Our recurrence relation is $T(n) = 16T(n/4) + \Theta (n)$.
+    In the context of the master theorem, $f(n) = \Theta (n)$ and $n^{\log_b a} = n^{\log_4 16} = n^2$.
+    We claim this fits case 1 of the master theorem.
+    To show this, we must show that (for some $\epsilon > 0$) $f(n) = O(n^{\log_b a - \epsilon}) \iff \Theta (n) = O(n^{2 - \epsilon})$. \parspace
+    Choose $\epsilon = 1$ and then we have $\Theta (n) = O(n)$ which is true if and only if $O(n) = O(n)$ and $n = O(n)$ (this is by definition of big-theta).
+    The first equality is trivially true and take $n_0 = 1$ and $c = 1$ to show that the second equality holds. \parspace
+    Thus, $T(n)$ satisfies case 1 of the master theorem and $T(n) = \Theta (n^2)$.
+    \item Our recurrence relation is $T(n) = 2T(n/2) + n \log n$.
+    In the context of the master theorem, $f(n) = n \log n$ and $n^{\log_b a} = n^{\log_2 2} = n^1 = n$.
+    We claim this fits case 3 of the master theorem.
+    To show this, we must show that $f(n) = \Omega (n^{\log_b a + \epsilon})$ for $\epsilon > 0$ and $a f(n/b) \leq c_1 f(n)$ for some $c_1 \in \R$. \parspace
+    We first show that $f(n) = \Omega (n^{\log_b a + \epsilon}) \iff n \log n = \Omega (n^{1 + \epsilon}) \iff n^{1 + \epsilon} = O(n \log n)$.
+    Choose $\epsilon = ?$
+    So we must show $n^ = O(n \log n)$.
+    Choose
+    \item Our recurrence relation is $T(n) = 6T(n/3) + n^2 \log n$.
+    In the context of the master theorem, $f(n) = n^2 \log n$ and $n^{\log_b a} = n^{\log_3 6}$ (note that $\log_3 6 \in (1,2)$).
+    We claim this fits case 3 of the master theorem.
+    To show this, we must show that $f(n) = \Omega (n^{\log_b a + \epsilon})$ for $\epsilon > 0$ and $a f(n/b) \leq c_1 f(n)$ for some $c_1 \in \R$. \parspace
+    We first show that $f(n) = \Omega (n^{\log_b a + \epsilon}) \iff n^2 \log n = \Omega (n^{\log_3 6 + \epsilon}) \iff n^{\log_3 6 + \epsilon} = O(n^2 \log n)$.
+    Choose $\epsilon$ such that $\log_3 6 + \epsilon = 2$.
+    So we must show $n^2 = O(n^2 \log n)$.
+    Choose $n_0 = 2$ and $c_0 = 1$, then we verify that $n^2 \leq 1 n^2 \log n$ for all $n \geq 2$.
+    Consider, $ n^2 \leq 1 n^2 \log n \iff 1 \leq \log n $ which is certainly true for for all $n \geq 2$. \parspace
+    We must now show that $6 f(n/3) \leq c_1 f(n)$ for some $c_1$ and sufficiently large $n$.
+    Choose $c_1 = 1$.
+    $$ 6 f(n/3) \leq c_1 f(n) \iff 6 (n/3)^2 \log(n/3) \leq n^2 \log(n) \iff (2/3) \log (n/3) \leq \log (n) $$
+    Using properties of logarithms, we can equivalently say that $\log ((n/3)^{2/3}) \leq \log (n)$ which is true exactly when $(n/3)^{2/3} \leq n \iff n/3 \leq n^{3/2} \iff 1/3 \leq \sqrt{n}$ which is true for $n \geq 1/9$. \parspace
+    Therefore, $T(n)$ satisfies case 3 of the master theorem and $T(n) = \Theta (n^2 \log n)$.
+    \item Our recurrence relation is $T(n) = 4T(n/2) + n^2$.
+    In the context of the master theorem, $f(n) = n^2$ and $n^{\log_b a} = n^{\log_2 4} = n^2$.
+    We claim this satisfies case 2 of the master theorem.
+    To show this, we must show that $f(n) = n^2 = \Theta (n^{\log_b a}) = \Theta (n^2)$. \parspace
+    To show that $n^2 = \Theta (n^2)$, we must show that $n^2 = O(n^2)$ (showing the other case is symmetric so there is only the condition).
+    Choose $n_0 = 1$ and $c = 1$, then $n^2 \leq n^2$ for all $n > 1$ and we conclude that $n^2 = O(n^2)$. \parspace
+    So $T(n)$ satisfies case 2 of the master theorem and $T(n) = \Theta (n^2 \log n)$.
+    \item Our recurrence relation is $T(n) = 9T(n/3) + n$.
+    In the context of the master theorem, $f(n) = n$ and $n^{\log_b a} = n^{\log_3 9} = n^2$.
+    We claim this satisfies case 1 of the master theorem.
+    To show this, we must show that $f(n) = n = O(n^{\log_b a - \epsilon}) = O(n^{2 - \epsilon})$ for some $\epsilon > 0$. \parspace
+    Let $\epsilon = 1$, then we must show that $n = O(n)$.
+    Choose $c = 1$ and $n_0 = 1$.
+    Then $n \leq n \iff 1 \leq 1$ which is certainly true for all $n \geq 1 = n_0$.
+    So $T(n)$ satisfies case 1 of the master theorem and $T(n) = \Theta (n^2)$.
+\end{enumerate}
 
 % ============================================
 
