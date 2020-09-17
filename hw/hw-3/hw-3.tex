@@ -122,7 +122,7 @@ Give the algorithm for binary search, using a for loop and no recursion.
         11. \hspace{4em}        beg $\leftarrow$ mid + 1 \\
         12. \hspace{0em} return indx
     \end{algorithm}
-    \item prove termination
+    \item  This algorithm at its most basic level only iterates through the array. Every time it loops the array is cut in half. A array cannot be infinite because each index in an array is assigned to a memory location.  There is no such thing as infinite memory so therefore the length of an array is finite.  Since we are cutting the array in half every iteration the loop will run at most $log_2(len(A))$ times and since the length of A is finite the algorithm must terminate.
     \item Our loop invariant is that $arr[beg] < targ < arr[end]$.
 
 \end{enumerate}
