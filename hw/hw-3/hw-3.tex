@@ -119,9 +119,9 @@ Give the algorithm for binary search, using a for loop and no recursion.
     	7.  \hspace{4em}	       indx $\leftarrow$ mid \\
     	8.  \hspace{2em}	   if (A[mid] $>$ targ) \\
     	9.  \hspace{4em}		   end $\leftarrow$ mid - 1 \\
-    	10. \hspace{2em}	   if (A[mid] $<$ targ) \\
-        11. \hspace{4em}        beg $\leftarrow$ mid + 1 \\
-        12. \hspace{0em} return indx
+    	10. \hspace{1.5em}	   if (A[mid] $<$ targ) \\
+        11. \hspace{3.5em}        beg $\leftarrow$ mid + 1 \\
+        12. return indx
     \end{algorithm}
     \item prove termination
     \item Our loop invariant is that $arr[beg] < targ < arr[end]$.
@@ -172,7 +172,7 @@ Chapter 2, Problem 1b (Generalized \textsc{SubsetSum}).
         7.  \hspace{0em} skip $\leftarrow$ \textsc{SubsetSum}($X, W, T, I, i+1$) \\
         8.  \hspace{0em} $I[i] \leftarrow 1$ \\
         9.  \hspace{0em} take $\leftarrow$ \textsc{SubsetSum}($X, W, T, I, i+1$) \\
-        10. \hspace{0em} return max(skip, take) \\
+        10. return max(skip, take) \\
 
         \textsc{Sum}(X, I) \\
         1.  \hspace{0em} sum $\leftarrow$ 0 \\
@@ -346,28 +346,59 @@ points inside this rectangle (including the boundary).  Let $\mathtt{buildings}$
 be a set of $n$ such triples representing buildings. Design an algorithm that takes $\mathtt{buildings}$ as input, and
 returns the skyline, where the skyline is a sequence of~$(x,y)$ coordinates
 defining $\cup_{b \in \mathtt{buildings}} \mathtt{rect}(b)$.  The output should
-start with $(\min_b{x_b^{(1)}},0)$ and end with $(\max_b{x_b^{(1)}},0)$.
+start with $(\min_b{x_b^{(1)}},0)$ and end with $(\max_b{x_b^{(2)}},0)$.
 
 \begin{enumerate}
-    \item Describe the problem in your own words, including
-        describing what the input and output is.
+    \item Describe the problem in your own words, including describing what the input and output is.
     \item Describe, in paragraph form, the algorithm you propose.
     \item Provide this algorithm in the algorithm environment.
-    \item What is the runtime of your algorithm? If you do not know, either give
-        the tightest bounds you know, or provide a decrementing function to show
-        that it does terminate.
-    \item Prove partial correctness (that if your algorithm terminates, it is
-        correct).
+    \item What is the runtime of your algorithm? If you do not know, either give the tightest bounds you know, or provide a decrementing function to show that it does terminate.
+    \item Prove partial correctness (that if your algorithm terminates, it is correct).
 \end{enumerate}
-
-
 
 \paragraph{Answer}
 
 % ============================================
 
-TODO: your answer goes between these lines
+\begin{enumerate}
+    \item
+    \item
+    \item Here is our algorithm.
+    \begin{algorithm}
+        \textsc{Skyline}(buildings) \\
+        1. \hspace{0em} sorted $\leftarrow$ \textsc{SortByX1}(buildings) \hspace{2em} // buildings sorted by $x_b^{(1)}$ \\
+        2. \hspace{0em} lastx $\leftarrow$ \textsc{SortByX2}(buildings)[len(buildings)] \hspace{2em} // get the largest $x_b^{(2)}$\\
+        3. \hspace{0em} x $\leftarrow$ buildings[1][1] \\
+        4. \hspace{0em} y $\leftarrow$ \textsc{Height}(sorted, 0) \\
+        5. \hspace{0em} skyline $\leftarrow$ (x, 0) $\cup$ (x, y) \hspace{2em} // list to store the skyline (we use union to represent appending) \\
+        6. \hspace{0em} while (x $<$ lastx) \\
+        7. \hspace{2em} newx $\leftarrow$ \textsc{NextX}(sorted, lastx, x, y) \hspace{2em} // get the x at the next intersection in the skyline \\
+        8. \hspace{2em} skyline $\leftarrow$ skyline $\cup$ (newx, y) \hspace{2em} // draw a horizontal line \\
+        9. \hspace{2em} newy $\leftarrow$ \textsc{Height}(sorted, newx) \hspace{2em} // get the y value for the skyline at newx \\
+        10. \hspace{1.5em} skyline $\leftarrow$ skyline $\cup$ (newx, newy) \hspace{2em} // draw a vertical line \\
+        11. \hspace{1.5em} x $\leftarrow$ newx \\
+        12. \hspace{1.5em} y $\leftarrow$ newy \\
+        13. skyline $\leftarrow \cup$ (lastx, 0) // since the loop has terminated, go straight down \\
+        14. return skyline \\\\
 
+        \textsc{Height}(sorted, x) \\
+        1. \hspace{0em} height $\leftarrow$ 0 \\
+        2. \hspace{0em} for i in $1..len(sorted)$ \\
+        3. \hspace{2em}     if (sorted[i][1] $\leq$ x $<$ sorted[i][2]) \\
+        4. \hspace{4em}         if (sorted[i][3] $>$ height) \\
+        5. \hspace{6em}             height $\leftarrow$ sorted[i][3] \\\\
+
+        \textsc{NextX}(sorted, lastx, x, y) \\
+        1. \hspace{0em} next $\leftarrow$ lastx \\
+        2. \hspace{0em} for i in $1..len(sorted)$ \\
+        3. \hspace{2em}     candidate $\leftarrow$ sorted[i][1]\ \\
+        4. \hspace{2em}     if (x $\leq$ candidate) \hspace{2em} // check if building starts after x \\
+        5. \hspace{4em}         if (candidate $<$ next) \hspace{2em} // check if buiding is closer than current next \\
+        6. \hspace{6em}              if (\textsc{Height}(sorted, candidate) $>$ \textsc{Height}(sorted, next)) \hspace{2em} // check if candidate is taller \\
+        7. \hspace{8em}                  next $\leftarrow$ candidate \\
+        8. \hspace{0em} return candidate
+    \end{algorithm}
+\end{enumerate}
 % ============================================
 
 
