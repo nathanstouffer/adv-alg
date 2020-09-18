@@ -374,8 +374,20 @@ start with $(\min_b{x_b^{(1)}},0)$ and end with $(\max_b{x_b^{(2)}},0)$.
 % ============================================
 
 \begin{enumerate}
-    \item
-    \item
+    \item As input, we expect a set of triples that represent the buildings of the skyline.
+    Each contains the inclusive bounds for the range of x values (these are the first two values in the triple) that the building occupies in the sky  and the height of the building as the third element.
+    We index each of these triples as arrays.
+    The problem is to return a sequence of xy pairs that represent the skyline by drawing straight lines between consecutive pairs of points.
+    We will return the sequence of xy pairs as a list.
+    \item Our algorithm makes use of a few subroutines.
+    First there are two sorting functions that we do not define because sorting is a well explored problem that we know operates in $\Theta (n \log n)$ time.
+    These two functions are \textsc{SortByX1} and \textsc{SortByX2}.
+    Both functions expect a set of triples as their input and return a sorted list of the same triples (the key for sorting depends on which function is called). \parspace
+    Aside from the \textsc{Skyline} algorith, we also define two helper functions \textsc{Height} and \textsc{NextX}.
+    \textsc{Height} is a function that expects a sorted (by $x_b^{(1)}$) list of triples and a query value $x$.
+    It returns that largest height of the buildings at that $x$ value (excluding all $x_b^{(2)}$ values).
+    The intention is to find the height of the skyline going forward from $x$.
+    \textsc{NextX} expects a sorted (by $x_b^{(1)}$) list of triples, the largest $x_b^{(2)}$, as well as a pair $(x, y)$ where $x$ is some value and $y$ is the corresponding height of the skyline at $x$.
     \item Here is our algorithm.
     \begin{algorithm}
         \textsc{Skyline}(buildings) \\
@@ -411,6 +423,8 @@ start with $(\min_b{x_b^{(1)}},0)$ and end with $(\max_b{x_b^{(2)}},0)$.
         7. \hspace{8em}                  next $\leftarrow$ candidate \\
         8. \hspace{0em} return candidate
     \end{algorithm}
+    \item
+    \item
 \end{enumerate}
 % ============================================
 
