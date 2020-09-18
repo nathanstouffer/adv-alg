@@ -55,8 +55,7 @@ Our groups contributions are:
 
     Another idea would be to break out the loop if a certain condition is true. Is this allowable with our model of computation?
 
-    \item (Problem 3-4 (response to a question from Dr. Fasy), Nathan Stouffer, and 10:30am-9/15/2020). TODO:
-        copy the post here.
+    \item (Problem 3-4 (response to a question from Dr. Fasy), Nathan Stouffer, and 10:30am-9/15/2020).
 
         I can see how an answer to W would provide an answer to S. If we set all the weights equal to 0, then W is pretty much just S because we only need to find one subset of X that sums to T and it is guaranteed to be the maximum weight. So I agree that W is at least as difficult as S.
 
@@ -287,7 +286,9 @@ Section 3.6.1
 		    \label{fig:q1class}
 	    \end{figure}
 	\end{center}
-    \item \{1,1,1,1,1,1\}\\
+    \newpage
+    \item Here is the output for the dynamic programming solution \\\\
+    \{1,1,1,1,1,1\}\\
 	\{1,2,1,1,1,1\}\\
 	\{1,2,2,1,1,1\}\\
 	\{1,2,2,2,1,1\}\\
@@ -408,6 +409,14 @@ start with $(\min_b{x_b^{(1)}},0)$ and end with $(\max_b{x_b^{(2)}},0)$.
     It returns that largest height of the buildings at that $x$ value (excluding all $x_b^{(2)}$ values).
     The intention is to find the height of the skyline going forward from $x$.
     \textsc{NextX} expects a sorted (by $x_b^{(1)}$) list of triples, the largest $x_b^{(2)}$, as well as a pair $(x, y)$ where $x$ is some value and $y$ is the corresponding height of the skyline at $x$.
+    \textsc{NextX} returns the smallest $x'$ larger than x where  $\textsc{Height}(x') > y$. \parspace
+    Now we describe \textsc{Skyline}.
+    \textsc{Skyline} takes in a set of triples representing buildings and returns a set of points representing the skyline of the buildings.
+    \textsc{Skyline} will start by sorting the triples according to the left endpoint of each triple and then selecting the smallest left endpoint as our starting point.
+    The algorithm then enters a while loop that runs until the largest right endpoint has been reached.
+    At each iteration, the next x value is selected and a horizontal line is drawn from the last point.
+    Then a vertical line is drawn up to the height at the new x.
+    After the while loop terminates, the largest right endpoint is added to the path defining the skyline.
     \item Here is our algorithm.
     \begin{algorithm}
         \textsc{Skyline}(buildings) \\
@@ -443,8 +452,17 @@ start with $(\min_b{x_b^{(1)}},0)$ and end with $(\max_b{x_b^{(2)}},0)$.
         7. \hspace{8em}                  next $\leftarrow$ candidate \\
         8. \hspace{0em} return candidate
     \end{algorithm}
-    \item
-    \item
+    \item We now give the runtime of our algorithm.
+    Let $n$ be the number of triples in the input.
+    Each sorting step takes $\Theta (n \log n)$ time.
+    Then the while loop runs a maximum of $2n$ times (2 for each building if there is no overlap).
+    Each of the helper functions \textsc{Height} and \textsc{NextX} run in $O(n)$ time.
+    Thus the total run time is $T(n) = 2 \Theta (n \log n) + 2n + O(n) = O(n \log n)$
+    \item We now prove partial correctness.
+    Assume that our algorithm terminates.
+    \textsc{NextX} searches the set of buildings for the next x value that changes the skyline.
+    Then, \textsc{Skyline} just asks \textsc{NextX} for the next value of x where the skyline changes height and draws lines accordingly.
+    Thus the algorithm sketches out the skyline as it runs.
 \end{enumerate}
 % ============================================
 
