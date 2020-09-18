@@ -55,7 +55,7 @@ Our groups contributions are:
 
     Another idea would be to break out the loop if a certain condition is true. Is this allowable with our model of computation?
 
-    \item (Problem 3-4 (response to a question from Dr. Fasy), Nathan Stouffer, and 10:30-9/15/2020). TODO:
+    \item (Problem 3-4 (response to a question from Dr. Fasy), Nathan Stouffer, and 10:30am-9/15/2020). TODO:
         copy the post here.
 
         I can see how an answer to W would provide an answer to S. If we set all the weights equal to 0, then W is pretty much just S because we only need to find one subset of X that sums to T and it is guaranteed to be the maximum weight. So I agree that W is at least as difficult as S.
@@ -78,9 +78,12 @@ Our groups contributions are:
 
         I'm not really sure if all of this is allowable/fits under the span of the real-ram model. But it's what came to mind.
 
-    \item (Problem 3-6 (Response to another students question), Kevin Browder, and 12:12-9/17/2020). I walked through the recursive calls like we did on Tuesday in class and used the Verbatim package in Latex for the indentation and to make it look at little nicer.
-    \item (TODO: state the problem number, name of poster, and date/time). TODO:
-        copy the post here.
+    \item (Problem 3-6 (Response to another students question), Kevin Browder, and 12:12pm-9/17/2020). \\
+    I walked through the recursive calls like we did on Tuesday in class and used the Verbatim package in Latex for the indentation and to make it look at little nicer.
+    \item (Problem 3-3 (response to another student), Nathan Stouffer, and 2:53pm-9/17/2020).\\
+        It seems like you can do whatever makes the most sense to you. As Dalton said, the way Prof Fasy mentioned it in class was to use the while loop. But your original suggestion of running a for loop log n times works just as well. It also makes proving termination quite easy, although the invariant is slightly harder to prove.
+
+        Whatever makes the most sense to you is the best way to go about the problem.
 \end{enumerate}
 
 % ============================================
@@ -106,7 +109,11 @@ Give the algorithm for binary search, using a for loop and no recursion.
     \item The problem that binary search solves is returning the location of a target value in an array.
     The input to the problem must be a sorted array of comparable items paired with a target value of the same type.
     The output will either by the index of the target value or -1 to flag that the target is not in the array.
-    \item
+    \item Our algorithm assumes that the array is sorted.
+    First, we set the index to -1 (assuming that the value is not in the array).
+    Then we iterate $\lceil \log_2(len(A)) \rceil$ times, splitting the array in half each time.
+    We are able to drop the half of the array that does not contain the target value.
+    We are guaranteed to reach the target item within the loop because there are less than $\lceil \log_2 (len(A)) \rceil$ splits in half.
     \item Here is the algorithm.
     \begin{algorithm}
     	\textsc{BinarySearch}(A[1..n], targ) \\
@@ -124,8 +131,10 @@ Give the algorithm for binary search, using a for loop and no recursion.
         12. return indx
     \end{algorithm}
     \item  This algorithm at its most basic level only iterates through the array. Every time it loops the array is cut in half. A array cannot be infinite because each index in an array is assigned to a memory location.  There is no such thing as infinite memory so therefore the length of an array is finite.  Since we are cutting the array in half every iteration the loop will run at most $log_2(len(A))$ times and since the length of A is finite the algorithm must terminate.
-    \item Our loop invariant is that $arr[beg] < targ < arr[end]$.
-
+    \item Our loop invariant is that $arr[beg] \leq targ \leq arr[end]$ (so long as $targ$ is actually in the range of the array).
+    Prior to the for loop, we are know that our loop invariant is true because every element in the array is between $arr[beg]$ and $arr[end]$.
+    Then at each step in the for loop, we either do not edit $beg/end$ or we select new values for $beg$ and $end$ to keep this statement true.
+    So we keep narrowing in on $targ$ and the loop invariant stays true at each step in the for loop.
 \end{enumerate}
 
 % ============================================
@@ -157,7 +166,9 @@ Chapter 2, Problem 1b (Generalized \textsc{SubsetSum}).
     If it exists, our task is to find the subset of $X$ that sums to $T$ with the heaviest weight.
     If no subset of $X$ sums to $T$, we will return $-\infty$.
     Our output will either be $-\infty$ or a positve integer (the weight of the heaviest subset that sums to $T$).
-    \item algorithm description \\
+    \item At a high level, our algorithm computes the sum of every subset of X.
+    If the sum of the subset is $T$, then the weight is compared with the other subsets that sum to $T$.
+    The subset with the highest weight is chosen. \parspace
     The array $I$ contains activations for whether to include the $i^{th}$ element of $X$ in the subset (0 means don't include, 1 means include).
     The index i denotes the first index of $I$ that has not been yet been called.
     \item Here is the algorithm.
@@ -308,9 +319,11 @@ Note: we assume that $T(1)=\Theta(1)$ whenever it is not explicitly given.
     We claim this fits case 3 of the master theorem.
     To show this, we must show that $f(n) = \Omega (n^{\log_b a + \epsilon})$ for $\epsilon > 0$ and $a f(n/b) \leq c_1 f(n)$ for some $c_1 > 1$. \parspace
     We first show that $f(n) = \Omega (n^{\log_b a + \epsilon}) \iff n \log n = \Omega (n^{1 + \epsilon}) \iff n^{1 + \epsilon} = O(n \log n)$.
-    Choose $\epsilon = ?$
-    So we must show $n^ = O(n \log n)$.
-    Choose
+    Choose $\epsilon = 0.1$
+    So we must show $n^{1.1} = O(n \log n)$, that is $n^{1.1} \leq c n \log n \iff n^{0.1} \leq c \log n \iff n^{0.1} \leq \log n^c$.
+    Choose $c=1$ and then it is true that $n \log n = \Omega (n^{1.1})$. \parspace
+    We now must show that $2 (n/2) \log (n/2) \leq c_1 n \log n \iff \log (n/2) \leq \log n^{c_1} \iff n/2 \leq n^{c_1} $ then just choose $c_1 = 2$ and the statement is true. \parspace
+    Thus, $T(n)$ satisfies case 3 of the master theorem and $T(n) = \Theta (n \log n)$.
     \item Our recurrence relation is $T(n) = 6T(n/3) + n^2 \log n$.
     In the context of the master theorem, $f(n) = n^2 \log n$ and $n^{\log_b a} = n^{\log_3 6}$ (note that $\log_3 6 \in (1,2)$).
     We claim this fits case 3 of the master theorem.
