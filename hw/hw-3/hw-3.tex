@@ -1,6 +1,7 @@
 \documentclass{article}
 \usepackage{../fasy-hw}
 \usepackage{ wasysym }
+\usepackage{fancyvrb}
 
 %% UPDATE these variables:
 \renewcommand{\hwnum}{3}
@@ -267,6 +268,8 @@ suffice).
 Walk through the exponential time Longest Increasing Subsequence (LIS) algorithm
 on page 108 for the input: $\left[ 1, 7, 6, 11, 3, 11 \right]$.
 
+
+
 Walk through the algorithm using the Dynamic Programming algorithm present in
 Section 3.6.1
 
@@ -274,7 +277,21 @@ Section 3.6.1
 
 % ============================================
 
-TODO: your answer goes between these lines
+\begin{enumerate}
+	\item The LIS is 3.
+	\begin{figure}[h]
+		\includegraphics[width=400pt]{image0.jpeg}
+		\caption{Problem 6 Part 1}
+		\label{fig:q1class}
+	\end{figure}
+	\item \{1,1,1,1,1,1\}\\
+	\{1,2,1,1,1,1\}\\
+	\{1,2,2,1,1,1\}\\
+	\{1,2,2,2,1,1\}\\
+	\{1,2,2,3,1,1\}\\
+	\{1,2,2,3,2,2\}\\
+	\{1,2,2,3,2,3\}
+\end{enumerate}
 
 % ============================================
 
