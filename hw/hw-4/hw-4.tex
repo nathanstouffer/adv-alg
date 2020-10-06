@@ -52,7 +52,57 @@ Our groups contributions are:
 \begin{enumerate}
     \item (TODO: state the problem number, and date/time). TODO:
         copy the post here.
-    \item ...
+    \item (Chapter 3, Question 32 at 3:51 pm on October 4) \\
+        Before going over a recursive idea, let's talk about some assumptions.
+        First let's assume that we require 0 1's to construct 0.
+        I am also going to assume that we can construct a negative number by multiplying any construction for a positive number by -1 (since the problem says we should consider any integer n as input.
+        Then since we can give the answer for any negative integer -n by computing 1 + the answer for n and we know the answer for n=0 to be 0, let's assume that our input is preprocessed as follows:
+
+        \begin{algorithm}
+            minN(n): \\
+            $\cdot$ \hspace{1.5em} if (n == 0): return 0 \\
+            $\cdot$ \hspace{1.5em} else if (n $>$ 0): return 1 + minNrec("(1)", n) // add one because we seed a 1 in the input expression \\
+            $\cdot$ \hspace{1.5em} else: return 1 + 1 + minNrec("(1)", abs(n)) // n must be negative so add the extra 1
+        \end{algorithm}
+
+        Then we can give the description for minNrec(expr, n) with the assumption that we have input starting with the expression string (1) and are trying to obtain a natural number n.
+        In English, we should perform the following steps.
+        First, test if expr evaluates to n.
+        If so, return 0. If expr evaluates to larger than n, return +inf. Otherwise, we should test each path from the current expression (this would be adding 1 inside the parenthesis, adding one outside the parenthesis, and multiplying by (1 + 1).
+        Then we can take the minimum of the returned values (as long as we add the how many ones are used in each pathway, see the psuedocode for an explicit example of what I mean).
+
+        To be more explicit about the three choices.
+        Adding an internal one would be like taking (1+1)*(1+1) to (1+1)*(1+1+1).
+        Adding an external on would be like taking (1+1)*(1+1) to (1+1)*(1+1) + (1).
+        Multiplying by (1+1) would be like taking (1+1)*(1+1)*(1+1).
+        The reason we multiply by (1+1)=2 instead of by (1) is because multiplying by (1) would result in some branches of the recursion tree never terminating (always multiplying by 1).
+
+        As a mathematical formula, I am not really sure what you mean by this.
+        The way I thought about it, we are really just adding a bunch of ones up.
+        I think the psuedocode gives the best example of the mathematical formula.
+
+        So here is the psuedocode.
+        Note that expr is a string so we take + to be concatenation.
+        Also note that evaluate() takes in an expression string and computes the integer that it evaluates to.
+
+        \begin{algorithm}
+            minNrec(expr, n) \\
+            $\cdot$ \hspace{1.5em} if (evaluate(expr) == n): return 0 \\
+            $\cdot$ \hspace{1.5em} else if (evaluate(expr) $>$ n): return +inf \\
+            $\cdot$ \hspace{1.5em} add\_internal\_one = 1 + minNrec(expr[:len(expr)-1] + "+1)", n) \\
+            $\cdot$ \hspace{1.5em} add\_external\_one = 1 + minNrec(expr + "+(1)", n) \\
+            $\cdot$ \hspace{1.5em} mult\_by\_two = 1 + 1 + minNrec(expr + "*(1+1)", n) \\
+            $\cdot$ \hspace{1.5em} return min \{ add\_internal\_one, add\_external\_one, mult\_by\_two \}
+        \end{algorithm}
+    \item (Chapter 3, Question 46 at 4:10 pm on October 4) \\
+        The problem we would like to solve needs two things: the hierarchy of the Giggle company and how much ``fun'' each employee is.
+        The goal is to create a guest list of employees that results in the maximum amount of fun had at the party.
+        To compute the amount of fun at the party, we get the fun value of each employee on the guest list and compute the sum of all those fun values.
+        However, we cannot just greedily select all the employees with positive fun values to attend the party.
+        We must include the president of the company.
+        Additionally, putting an employee on the guest list means that their immediate underlings cannot attend the party.
+        Subject to these constraints, we would like for the employees to have the most fun possible.
+    \item (Chapter 3, Question 46 at TODO on October 4) \\
 \end{enumerate}
 
 % ============================================
