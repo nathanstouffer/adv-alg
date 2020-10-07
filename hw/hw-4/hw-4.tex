@@ -175,17 +175,29 @@ Suppose you are given an array $A[1 .. n]$ of numbers, which may be positive, ne
 (b) Describe and analyze an algorithm that finds the largest product of elements in a contiguous subarray $A[i .. j]$.
 
 \begin{enumerate}
-    \item problem descrition in our own words
-    \item paragraph description of the algorithm
+    \item First we describe the problem in our own words.
+        Given an array of real numbers $A[1..n]$ with length $n$, our task is to find the maximum sum (or product) that a contiguous portion of $A$ gives.
+        The minimum such value that can be returned for sums is 0 (since we take a contiguous section of length 0 to obatin this).
+        Similarly, the minimum value that can be returned for the product is 1.
+        We assume that the functions sum($\cdot$) and product($\cdot$) are built in an return the following values: sum($A$, $i$, $j$) $ = \Sigma _{k=i}^j A[k] $ and product($A$, $i$, $j$) $ = \Pi _{k=i}^j A[k] $ when $i \leq j$.
+    \item The solutions to each of these problems are quite similar.
+        At a high level, what we want to do is compute the sum/product of each contiguous subarry in $A$ and return the maximum that we find.
+        The way that we do this sets us up nicely for a dynamic programming solution.
+        Say we want to know the \textsc{MaxSum} starting with the index 1 and ending with index $n$.
+        Let's call a function \textsc{MaxSum}($A$, $1$, $n$) that performs the following.
+        First it computes the sum of the contiguous values found at indices $1..n$.
+        Then it recursively calls \textsc{MaxSum} on the subarrays $A[2..n]$ and $A[1..n-1]$.
+        When the recursion terminates, we return the maximum of returned values compared with sum of the entire array.
+        A similar argument exists for \textsc{MaxProd} that uses the product method instead of the sum.
     \item Here is the psuedo code for our \textsc{MaxSum}.
-        A modified version of \textsc{MaxSum} can be used for \textsc{MaxProd}.
+        A slightly modified version of \textsc{MaxSum} can be used for \textsc{MaxProd}.
         \begin{algorithm}
             \textsc{MaxSum}($A[1..n]$, $i$ , $j$) \\
             1. \hspace{1em} if ($i > j$) \\
             2. \hspace{2em}     return 0 \\
             3. \hspace{1em} current = sum($A$, $i$, $j$) \\
-            4. \hspace{1em} left = \textsc{MaxScore}($A$, $i+1$, $j$) \\
-            5. \hspace{1em} right = \textsc{MaxScore}($A$, $i$, $j-1$) \\
+            4. \hspace{1em} left = \textsc{MaxSum}($A$, $i+1$, $j$) \\
+            5. \hspace{1em} right = \textsc{MaxSum}($A$, $i$, $j-1$) \\
             6. \hspace{1em} return max(current, left, right)
         \end{algorithm}
         \begin{algorithm}
@@ -193,13 +205,67 @@ Suppose you are given an array $A[1 .. n]$ of numbers, which may be positive, ne
             1. \hspace{1em} if ($i > j$) \\
             2. \hspace{2em}     return 1 \\
             3. \hspace{1em} current = product($A$, $i$, $j$) \\
-            4. \hspace{1em} left = \textsc{MaxScore}($A$, $i+1$, $j$) \\
-            5. \hspace{1em} right = \textsc{MaxScore}($A$, $i$, $j-1$) \\
+            4. \hspace{1em} left = \textsc{MaxProd}($A$, $i+1$, $j$) \\
+            5. \hspace{1em} right = \textsc{MaxProd}($A$, $i$, $j-1$) \\
             6. \hspace{1em} return max(current, left, right)
         \end{algorithm}
-    \item prove termination
-    \item prove correctness
-    \item give dp solution?
+    \item The pseudocode for the above algorithms are almost identical.
+        There are only two differences, first we return a different minimum value (0 vs 1).
+        Second, in \textsc{MaxSum} we sum the values $i..j$ whereas in \textsc{MaxProd} we multiply the same values.
+        When each of the sum and product function are called, we know that $i \leq j$ so $0 \leq j-i$.
+        We also know that $j-i \leq n$ so each function will run in $O (n)$ time (it is performing nor more than $n$ operations).
+
+        Other than those two small differences, the algorithms are identical in structure.
+        So if we prove termination and partial corretness one of them, the same must be true for the other.
+        From here on, we will only focus on \textsc{MaxSum}, but our results apply to \textsc{MaxProd} as well.
+
+        So we must now show termination for \textsc{MaxSum}.
+        Certainly lines 1 and 2 will terminate since they run in constant time.
+        Line 3 runs in $O(n)$ time (shown above), so it will terminate.
+        Additionally line 6 will terminate because max runs in linear time.
+        So we now need only show that lines 4 and 5 terminate.
+        We do so with a decrementing function.
+
+        Let our state space be the length of the array that is being considered in a recursive call $R_i$.
+        This is the contiguous range of values $i..j$ (inclusive).
+        This maps to the natural number $j-i+1$ (adding 1 because the bounds are inclusive).
+        The left recursive call $R_{i+1}^l$ considers the contiguous range $i+1..j$ which maps to the natural number $j-(i+1)-1 = j-i$ which is strictly less than $j-i+1$.
+        So the left recursive call must terminate.
+        Similarly, the right recursive call $R_{i+1}^r$ considers the contiguous range $i..j-1$ which maps to the natural number $j+1-i+1 = j-i$ which is strictly less than $j-i+1$.
+        Therefore, the right recursive call must terminate.
+
+        Since every line in the \textsc{MaxSum} algorithm terminates, the entire algorithm must terminate.
+    \item We must now show partial correctness under the assumption that the algorithm terminates.
+        Our invariant is that the left and right recursive calls always contain the maximum sum in their respective ranges.
+        This is certainly true in the base case of $i > j$ since $i > j$ does not reference a contiguous portion of the array so all we can do is return that the maximum sum is 0.
+        Towards induction, now suppose that, for some $i,j$ such that $i \leq j$, we have the fact that the left and right recursive calls each contain the maximum sum of contiguous values in their respective ranges.
+        We then have three things: the sum stored in current ($max_c$), the maximum sum in the range $i+1..j$ ($max_l$), and the maximum sum in the range $i..j-1$ ($max_r$).
+        If $max_c$ is larger than both $max_l$ and $max_r$ then $max_c$ is the largest sum in the range $i..j$.
+        However, if one of $max_r, max_l$ is larger, then $max_c$ cannot be the maximum sum in $i..j$.
+        So we should return the max of the current, left, and right gives the maximum sum in $i..j$.
+        This proves the inductive step, implying that the invariant is true at all points in the recursion tree.
+        Since we already know that the algorithm terminates and it follows that the algorithm will terminate in some branch of the recursion tree, it must terminate in a correct state.
+        Thus our algorithm is correct.
+    \item So we have proven that the above algorithms produce correct solutions of the contiguous sum/product problem.
+        However, they are quite slow.
+        Conveniently, we can make a dynamic programming algorithm out of our current solutions.
+        If $i$ indexes the rows and $j$ indexes the columns of a matrix $T$ (where $i \leq j$), then we can compute $T(i, j)$ as long as we know $T(i+1, j)$ and $T(i, j-1)$ and are willing to put in some work add all the elements from $i..j$ (inclusive).
+        Then we can just fill out the matrix by computing the diagonal (since $T(i, i)$ is just $max (0, A[i])$) and then going diagonally down from $A[i, j+1]$ (and repeating this process until the top right corner is reached).
+        Here is a drawing of the matrix for the case of $n=5$:
+
+        \begin{figure}
+            \begin{center}
+                \includegraphics[scale=0.1]{image0}
+                \caption{Dependency Table for $n=5$}
+    		    \label{fig:dynprog}
+            \end{center}
+        \end{figure}
+
+        We are not sure if this is the optimal dynamic programming solution because there is that expensive linear sum that must run for each entry in the table.
+        But we can at least give an upper bound for how long our new dynamic programming solution takes.
+        Filling out an entry in the table will take $O (n) + O(1) + O(1)$ time.
+        The constant operations come from accessing the table and the $O(n)$ operation bounds time taken to sum of the elements found from $i$ to $j$.
+        The number of entries that we must fill out in the table is the sum $\Sigma _{k=1}^n k = n(n+1)/2$ (sum found by counting from the bottom right of the matrix) so this dynamic programming solution runs in $(n(n+1)/2) * O (n) = O(n^3)$ time.
 \end{enumerate}
 
 % ============================================
