@@ -25,7 +25,7 @@ General homework expectations:
 \end{itemize}
 
 \nextprob
-\collab{TODO}
+\collab{Nathan Stouffer and Kevin Browder}
 
 You should make at least ten contributions to the Piazza board
 discussing the solutions to Problems in Chapter 3 of the textbook.  Your
@@ -157,37 +157,39 @@ Our groups contributions are:
         I am not sure if this is the optimal dp solution because there is that expensive linear product that must run for each entry in the table. We can at least give an upper bound for this. Filling out an entry in the table will take $O (n) + O(1) + O(1)$ time. The constant operations come from accessing the table and the $O(n)$ operation is the product of elements $i..j$. The number of entries that we must fill out in the table is the sum $\Sigma _{k=1}^n k = n(n+1)/2$ (sum found by counting from bottom right of the matrix) so this dp solution runs in $n(n+1)/2 O (n) = O(n^3)$ time. This is definitely better than exponential but I doubt that it is optimal.
    	\item (Chapter 3, Question 12 at 9:51 pm on October 6)\\
         	subproblem c: Five years later, thirteen-year-old Elmo has become a much stronger player. Describe and analyze an algorithm to determine, given the initial sequence of cards, the maximum number of points that you can collect playing against a perfect opponent.
-        	\begin{Verbatim}
-        	def elmoMax(mem, cards, myTurn):
-        	max = 0
-        	if(not cards):
-        	return 0
-        	if str(cards) in mem: #reference previously calculated state
-        	return mem[str(cards)]
-        	elif not myTurn: #Elmo's turn
-        	if cards[0] > cards[len(cards) - 1]:
-        	max = elmoMax(mem, cards[1:], True)
-        	else:
-        	max = elmoMax(mem, cards[:-1], True)
-        	else: #your turn
-        	max = max(cards[0] + elmoMax(mem, cards[1:], False), cards[len(cards) - 1] + elmoMax(mem, cards[:-1], False))
-        	mem[str(cards)] = max #store state
-        	return max
-        	\end{Verbatim}
-   
-   	\item (HW 4 Question About Parts 1 & 2 at 9:33 pm on October 6)\\Question: So part one is having us 	contribute one of the six parts of a solution to a question on Piazza and part 2 is requiring us to go through all six steps, right? Are we allowed to use the answers from 4-2 in 4-1 Piazza posts? \\
+    \begin{Verbatim}
+    def elmoMax(mem, cards, myTurn):
+    max = 0
+    if (not cards):
+        return 0
+    if str(cards) in mem: #reference previously calculated state
+        return mem[str(cards)]
+    elif not myTurn: #Elmo's turn
+        if cards[0] > cards[len(cards) - 1]:
+            max = elmoMax(mem, cards[1:], True)
+        else:
+            max = elmoMax(mem, cards[:-1], True)
+    else: #your turn
+        left = cards[0] + elmoMax(mem, cards[1:], False)
+        right = cards[len(cards) - 1] + elmoMax(mem, cards[:-1], False)
+        max = max(left, right)
+        mem[str(cards)] = max #store state
+    return max
+    \end{Verbatim}
+    \item (HW 4 Question About Parts 1 & 2 at 9:33 pm on October 6) \\
+        Question: So part one is having us 	contribute one of the six parts of a solution to a question on Piazza and part 2 is requiring us to go through all six steps, right? Are we allowed to use the answers from 4-2 in 4-1 Piazza posts? \\
         Yes, the question just says to answer in your own words for part two. You just can't copy paste other students answers into your solution.
   	\item (Chapter 3, Question 25 (Largest Rectangular SubArray Sum) at 2:00pm on October 6) \\
         Seth,
-        
-        This is a very interesting problem and I think your solution would work but it looks very expensive, O(n4) I think. I think you can apply Kadane’s algorithm which finds the longest increasing sub sequence for a one dimensional array to reduce the time complexity to O(n3). If we find top and bottom row numbers for every fixed left and right column pair. To find the top and bottom row numbers, calculate sum of elements in every row from left to right and store these sums in an array. So the indices in this array indicate sum of elements from left to right in the corresponding row If we apply Kadane’s  algorithm on this array we get the maximum sum subarray of array, this maximum sum would be the maximum possible sum with left and right as boundary columns. To get the overall maximum sum, we compare this sum with the maximum sum so far.
-        
+
+        This is a very interesting problem and I think your solution would work but it looks very expensive, $O(n^4)$ I think. I think you can apply Kadane’s algorithm which finds the longest increasing sub sequence for a one dimensional array to reduce the time complexity to $O(n^3)$. If we find top and bottom row numbers for every fixed left and right column pair. To find the top and bottom row numbers, calculate sum of elements in every row from left to right and store these sums in an array. So the indices in this array indicate sum of elements from left to right in the corresponding row If we apply Kadane’s algorithm on this array we get the maximum sum subarray of array, this maximum sum would be the maximum possible sum with left and right as boundary columns. To get the overall maximum sum, we compare this sum with the maximum sum so far.
+
 \end{enumerate}
 
 % ============================================
 
 \nextprob
-\collab{TODO}
+\collab{Nathan Stouffer and Kevin Browder}
 
 Choose one of the Chapter 3 problems discussed in Piazza and provide a solution
 in your own words.  This should be a polished solution.
@@ -280,7 +282,7 @@ Suppose you are given an array $A[1 .. n]$ of numbers, which may be positive, ne
         If $i$ indexes the rows and $j$ indexes the columns of a matrix $T$ (where $i \leq j$), then we can compute $T(i, j)$ as long as we know $T(i+1, j)$ and $T(i, j-1)$ and are willing to put in some work add all the elements from $i..j$ (inclusive).
         Then we can just fill out the matrix by computing the diagonal (since $T(i, i)$ is just $max (0, A[i])$) and then going diagonally down from $A[i, j+1]$ (and repeating this process until the top right corner is reached).
         Here is a drawing of the matrix for the case of $n=5$:
-
+        \newpage
         \begin{figure}
             \begin{center}
                 \includegraphics[scale=0.1]{image0}
@@ -299,7 +301,7 @@ Suppose you are given an array $A[1 .. n]$ of numbers, which may be positive, ne
 % ============================================
 
 \nextprob
-\collab{TODO}
+\collab{Nathan Stouffer and Kevin Browder}
 
 For this problem, choose either the Edit distance algorithm (Section 3.7) or the
 Subset Sum problem (Section 3.8). Look at three different sources (including the
