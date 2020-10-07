@@ -1,6 +1,7 @@
 \documentclass{article}
 \usepackage{../fasy-hw}
 \usepackage{ wasysym }
+\usepackage{fancyvrb}
 
 %% UPDATE these variables:
 \renewcommand{\hwnum}{4}
@@ -154,6 +155,33 @@ Our groups contributions are:
         Conveniently, we can make a dynamic programming algorithm out of this. If $i$ indexes the rows and $j$ indexes the columns of a matrix $T$ (where $i \leq j$), then we can compute $T(i, j)$ as long as we know $T(i+1, j)$ and $T(i, j-1)$ and are willing to put in some work multiplying all the elements from $i..j$ (inclusive). Then we can just fill out the matrix computing the diagonal (since $T(i, i)$ is just $max (0, A[i])$) and then going diagonally down from $A[i, j+1]$ (and repeating this process until the top right corner is reached). Hopefully that explanation of dependencies is clear without a table/dependency graph.
 
         I am not sure if this is the optimal dp solution because there is that expensive linear product that must run for each entry in the table. We can at least give an upper bound for this. Filling out an entry in the table will take $O (n) + O(1) + O(1)$ time. The constant operations come from accessing the table and the $O(n)$ operation is the product of elements $i..j$. The number of entries that we must fill out in the table is the sum $\Sigma _{k=1}^n k = n(n+1)/2$ (sum found by counting from bottom right of the matrix) so this dp solution runs in $n(n+1)/2 O (n) = O(n^3)$ time. This is definitely better than exponential but I doubt that it is optimal.
+   	\item (Chapter 3, Question 12 at 9:51 pm on October 6)\\
+        	subproblem c: Five years later, thirteen-year-old Elmo has become a much stronger player. Describe and analyze an algorithm to determine, given the initial sequence of cards, the maximum number of points that you can collect playing against a perfect opponent.
+        	\begin{Verbatim}
+        	def elmoMax(mem, cards, myTurn):
+        	max = 0
+        	if(not cards):
+        	return 0
+        	if str(cards) in mem: #reference previously calculated state
+        	return mem[str(cards)]
+        	elif not myTurn: #Elmo's turn
+        	if cards[0] > cards[len(cards) - 1]:
+        	max = elmoMax(mem, cards[1:], True)
+        	else:
+        	max = elmoMax(mem, cards[:-1], True)
+        	else: #your turn
+        	max = max(cards[0] + elmoMax(mem, cards[1:], False), cards[len(cards) - 1] + elmoMax(mem, cards[:-1], False))
+        	mem[str(cards)] = max #store state
+        	return max
+        	\end{Verbatim}
+   
+   	\item (HW 4 Question About Parts 1 & 2 at 9:33 pm on October 6)\\Question: So part one is having us 	contribute one of the six parts of a solution to a question on Piazza and part 2 is requiring us to go through all six steps, right? Are we allowed to use the answers from 4-2 in 4-1 Piazza posts? \\
+        Yes, the question just says to answer in your own words for part two. You just can't copy paste other students answers into your solution.
+  	\item (Chapter 3, Question 25 (Largest Rectangular SubArray Sum) at 2:00pm on October 6) \\
+        Seth,
+        
+        This is a very interesting problem and I think your solution would work but it looks very expensive, O(n4) I think. I think you can apply Kadane’s algorithm which finds the longest increasing sub sequence for a one dimensional array to reduce the time complexity to O(n3). If we find top and bottom row numbers for every fixed left and right column pair. To find the top and bottom row numbers, calculate sum of elements in every row from left to right and store these sums in an array. So the indices in this array indicate sum of elements from left to right in the corresponding row If we apply Kadane’s  algorithm on this array we get the maximum sum subarray of array, this maximum sum would be the maximum possible sum with left and right as boundary columns. To get the overall maximum sum, we compare this sum with the maximum sum so far.
+        
 \end{enumerate}
 
 % ============================================
@@ -283,8 +311,10 @@ and differences in the presentation and analysis of the algorithms.
 
 % ============================================
 
-TODO: your answer goes between these lines
-
+	We choose to look at the Edit Distance Algorithm from Section 3.7 of the textbook. Our three sources were the textbook, GeeksforGeeks\footnote{Edit Distance: DP-5, GeeksforGeeks, January 13, 2020, https://www.geeksforgeeks.org/edit-distance-dp-5/.} and a Stanford lecture\footnote{Dan Jurafsky, “Minimum Edit Distance,” Stanford University, n.d., https://web.stanford.edu/class/cs124/lec/med.pdf.}. All  three presentations begin with a quick definition of the what the algorithm actually does in words. The textbook goes into much more detail than the other two sources but all sources include a quick example showing the algorithm working and the resulting output. Stanford's presentation also touches on practical implementation of Edit distance including spell check, computational biology and others. After this introduction GeeksforGeeks and the textbook dive into the subproblems and recursive approach to this problem. The Stanford article touches on the naive approach briefly but not in the depth that the other two look at it. GeeksforGeeks gives fully functional code in 5 languages for the naive approach while the textbook just describes it. All three sources go over the downsides of recursion because you have to cover a lot of possibilities multiple times and the resulting exponential time complexity.\\
+	 All three sources then go into dynamic programming as the solution to this issue. GeeksforGeeks is the most code oriented source. After they briefly go over the time complexity issue with the naive recursive solution they dive right into the dynamic programming source code in 5 languages again complete with sample input and output and time complexity. They provide two separate solutions with the second being more optimized for space complexity as the first solution becomes unusable when the string lengths are greater than 2000. They then give a short video that gives an overview of everything I have described. I personally really liked their write up and it is very practically oriented.  \\
+	 Stanford goes in another direction, they give some pretty high level pseudo code and then dive into an example edit distance table and go over how it is filled up with an example. They also give the completed table. They then add backtracing to the table and walk through the pseudo code for that as well. They also give the time complexity for each step. They then give the distance matrix. They then go on to some more complicated topics like weighted edit distance and applying this concept to sequence alignment in the form of natural language processing and computational biology. I did really enjoy how they included real life examples outside of academics but their deep dive into the tables was not very helpful and I through it added more confusion than clarification. That also might be because it is power point that is meant to be a lecture.\\
+	The textbook kind of combines the previous two sources. They give a lot more setup for the dynamic programming solution including subproblems, memoization struture, dependencies, evaluation order and space and time. They also give some very nice pseudo code that is much better than the other two sources. They also give a memoization table that is much nicer and easier to read than the Stanford one. It is also just the completed table which takes a lot less room. The only think I do not like about the textbook writeup is that they don't give any sort of context or idea of where you would apply this algorithm which I really like. Other than than I think this source does the best job of explaining the algorithm.
 % ============================================
 
 \end{document}
