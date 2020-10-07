@@ -50,8 +50,6 @@ As a reminder, a full solution to a textbook problem will have the following ele
 
 Our groups contributions are:
 \begin{enumerate}
-    \item (TODO: state the problem number, and date/time). TODO:
-        copy the post here.
     \item (Chapter 3, Question 32 at 3:51 pm on October 4) \\
         Before going over a recursive idea, let's talk about some assumptions.
         First let's assume that we require 0 1's to construct 0.
@@ -102,7 +100,60 @@ Our groups contributions are:
         We must include the president of the company.
         Additionally, putting an employee on the guest list means that their immediate underlings cannot attend the party.
         Subject to these constraints, we would like for the employees to have the most fun possible.
-    \item (Chapter 3, Question 46 at TODO on October 4) \\
+    \item (Chapter 3, Question 46 at 10:00 am on October 4) \\
+        Here is a more precise description of the problem. As Brittany said, let Giggle have $n$ employees and ids that range from 1 to $n$ (we include the president in this list and the president has employee id 1). Then we have the level of fun that each employee brings to the party, labeled as $fun_i$ where $i$ is employee id (note that $fun_1 < 0$ but there are no other constraints on the amount of fun that other employees can bring.
+
+        Our input should then consist of two things. First, we should have a directed graph $T$ where the vertices are the $n$ employees of the company and edges are drawn between a supervisor and their immediate underlings. The supervisor is the tail of the edge and the immediate inferior is the tip of the edge. $T$ is necessarily a tree, otherwise there would be some weird power relationships in the company. The second part of our input should be an array where the $i^{th}$ entry contains $fun_i$. This way, we can access the level of fun that each employee brings.
+
+        The algorithm will return a set of natural numbers $A$ (representing employee ids) such that $ \{ 1 \} \subset A \subset \{ 1, 2, ... , n \} $ and subject to the following constraint: it must be the case that if $ a \in A $, it must be true that any direct children of $a$ (with respect to the $T$) are not in $A$. With respect to the constraints of the problem, we want to return the maximum $\sum_{i \in A} fun_i $ for the company party.
+    \item (Chapter 3, Question 3 at 10:20 am on October 4) \\
+        In response to the runtime question that Brittany asked, we want to know whether Greg's algorithm runs in $O (n)$ time or $\Theta (n)$ time.
+        The algorithm runs in $\Theta (n)$ time.
+        Greg has already noted that the algorithm runs in $O (n) $ time so we only need to show that the algorithm runs in $\Theta (n) $.
+        With the exception of line 4, all lines in the pseudocode run in constant time (they are all if statements, array access, ... ).
+        Then line 4 runs exactly $n$ times (since the length of the array $A$ is $n$.
+        So the algorithm runs in $\Theta (n)$ time.
+
+        As for the loop invariant, the value in largest\_subarray\_sum is always $\max _{j \leq k} \sum _{l=j}^k A[l] $ such that $k \leq i$.
+        In words, this is the maximum sum of contiguous values in the array such that the contiguous section appears no later than the $i^{th}$ index.
+        Once the loop terminates, we will have $\max _{j \leq k} \sum _{l=j}^k A[l] $ such that $k \leq n $, which is the desired solution.
+    \item (Chapter 3, Question 13 at 10:50 am on October 4) \\
+        I was thinking of using the following recursive solution. In words, we want to compute the total score for each valid sequence of songs that we will dance to and return the maximum. Recall that we have Score[1..n] and Wait[1..n].
+
+        \begin{algorithm}
+            \textsc{MaxScore}(Score[1..n], Wait[1..n]) \\
+            $\cdot $ \hspace{1em} if (len(Score) == 0) \hspace{9em} // test if we are at the bottom of the recursion tree \\
+            $\cdot $ \hspace{2em} return 0 \\
+            $\cdot $ \hspace{1em} sit = MaxScore(Score[2:], Wait[2:]) \hspace{2em} // don't dance to this one, call on remaining songs \\
+            $\cdot $ \hspace{1em} w = Wait[1] \hspace{12em} // how many songs we have to wait if we dance \\
+            $\cdot $ \hspace{1em} dance = Score[1] + MaxScore(Score[2+w:], Wait[2+w:]) \hspace{0.25em} // dance to this one, call on remaining songs \\
+            $\cdot $ \hspace{1em} return max(sit, dance)
+        \end{algorithm}
+    \item (Chapter 3, Question 3b at 4:30 pm on October 4) \\
+        There has been a lot of discussion on Chapter 3, Question 3a. Part b also seems pretty interesting. Here is the question:
+
+        Suppose you are given an array $A[1..n]$ of numbers, which may be positive, negative, or zero, and which are not necessarily integers.
+        Describe and analyze an algorithm that finds the largest product of elements in a contiguous array $A[i..j]$.
+    \item (Chapter 3, Question 3b at 5:50 pm pm on October 4) \\
+        Here is the psuedocode for what I am thinking. When I posted this, I was struggling to think about how negatives could change things up from Question 3a. But I think that there is actually no change. We can just use the following pseudocode:
+
+        \begin{algorithm}
+            MaxProd(A[1..n], i, j) \\
+            $\cdot$ \hspace{1em} if ($i > j$) \\
+            $\cdot$ \hspace{2em} return 1 \\
+            $\cdot$ \hspace{1em} current = product(A, i, j) \\
+            $\cdot$ \hspace{1em} left    = MaxProd(A, i+1, j) \\
+            $\cdot$ \hspace{1em} right   = MaxProd(A, i, j-1) \\
+            $\cdot$ \hspace{1em} return max(current, left, prod)
+        \end{algorithm}
+
+        This is correct because we compute the product of every subset of A and choosing the max (this seems to be a modified version of the solutions suggested so far). I agree with the analysis that this will take $O (2^n)$ time because that is the number of options that must be processed.
+
+        Additionally, the recurrence relation for this is algorithm is $T(n) = n + 2T(n-1)$. We must add $n$ because we are multiplying $n$ things and then the $2T(n-1)$ appears because of the calls to MaxProd with arrays of length $n-1$. This recurrence relation definitely has at least an exponential bound because the 2 in the expression $T(n) = n + 2(n-1+2(n-2+2(n-3 + 2(\cdot \cdot \cdot))))$ appears $n-1$ times and simplifying it will give $2^{n-1}$.
+
+        Conveniently, we can make a dynamic programming algorithm out of this. If $i$ indexes the rows and $j$ indexes the columns of a matrix $T$ (where $i \leq j$), then we can compute $T(i, j)$ as long as we know $T(i+1, j)$ and $T(i, j-1)$ and are willing to put in some work multiplying all the elements from $i..j$ (inclusive). Then we can just fill out the matrix computing the diagonal (since $T(i, i)$ is just $max (0, A[i])$) and then going diagonally down from $A[i, j+1]$ (and repeating this process until the top right corner is reached). Hopefully that explanation of dependencies is clear without a table/dependency graph.
+
+        I am not sure if this is the optimal dp solution because there is that expensive linear product that must run for each entry in the table. We can at least give an upper bound for this. Filling out an entry in the table will take $O (n) + O(1) + O(1)$ time. The constant operations come from accessing the table and the $O(n)$ operation is the product of elements $i..j$. The number of entries that we must fill out in the table is the sum $\Sigma _{k=1}^n k = n(n+1)/2$ (sum found by counting from bottom right of the matrix) so this dp solution runs in $n(n+1)/2 O (n) = O(n^3)$ time. This is definitely better than exponential but I doubt that it is optimal.
 \end{enumerate}
 
 % ============================================
@@ -124,7 +175,31 @@ Suppose you are given an array $A[1 .. n]$ of numbers, which may be positive, ne
 (b) Describe and analyze an algorithm that finds the largest product of elements in a contiguous subarray $A[i .. j]$.
 
 \begin{enumerate}
-    \item 
+    \item problem descrition in our own words
+    \item paragraph description of the algorithm
+    \item Here is the psuedo code for our \textsc{MaxSum}.
+        A modified version of \textsc{MaxSum} can be used for \textsc{MaxProd}.
+        \begin{algorithm}
+            \textsc{MaxSum}($A[1..n]$, $i$ , $j$) \\
+            1. \hspace{1em} if ($i > j$) \\
+            2. \hspace{2em}     return 0 \\
+            3. \hspace{1em} current = sum($A$, $i$, $j$) \\
+            4. \hspace{1em} left = \textsc{MaxScore}($A$, $i+1$, $j$) \\
+            5. \hspace{1em} right = \textsc{MaxScore}($A$, $i$, $j-1$) \\
+            6. \hspace{1em} return max(current, left, right)
+        \end{algorithm}
+        \begin{algorithm}
+            \textsc{MaxProd}($A[1..n]$, $i$ , $j$) \\
+            1. \hspace{1em} if ($i > j$) \\
+            2. \hspace{2em}     return 1 \\
+            3. \hspace{1em} current = product($A$, $i$, $j$) \\
+            4. \hspace{1em} left = \textsc{MaxScore}($A$, $i+1$, $j$) \\
+            5. \hspace{1em} right = \textsc{MaxScore}($A$, $i$, $j-1$) \\
+            6. \hspace{1em} return max(current, left, right)
+        \end{algorithm}
+    \item prove termination
+    \item prove correctness
+    \item give dp solution?
 \end{enumerate}
 
 % ============================================
