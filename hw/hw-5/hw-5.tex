@@ -33,8 +33,14 @@ have one post count, the day before two, etc.)
 
 My contributions are:
 \begin{enumerate}
-    \item (TODO: state the problem number, and date/time). \\
-        TODO: copy the post here.
+    \item (Chapter 6 Question 5 at 12:45 pm on 10/09/2020). \\
+        An edge $e$ in a connected undirected graph $G$ is called a bridge (or a cut edge) if the subgraph $G - e $ (obtained by removing $e$ from $G$) is disconnected.
+        \begin{enumerate}[label=(\alph*)]
+            \item Given $G$ and edge $e$ describe a linear-time algorithm that determines whether $e$ is a bridge or not. What is the running time to find all bridges by trying your algorithm for each edge?
+            \item Let $T$ be an arbitrary spanning tree of $G$. Prove that every bridge of $G$ is also an edge in $T$. This claim implies that $G$ has at most $V-1$ bridges. How does this information improve your algorithm from part (a) to find all bridges?
+            \item Now suppose we root $T$ at an arbitrary vertex $r$. For any vertex $v$, let $T_v$ denote the subtree of $T$ rooted at $v$; for example, $T_r = T$. Let $uv$ be an arbitrary edge of $T$, where $u$ is the parent of $v$. Prove that $uv$ is a bridge of $G$ if and only if $uv$ is the only edge in $G$ with exactly one endpoint in $T_v$ .
+            \item Describe a linear-time algorithm to identify every bridge in $G$. [Hint: Let $T$ be a depth-first spanning tree of $G$.]
+        \end{enumerate}
     \item ...
 \end{enumerate}
 
