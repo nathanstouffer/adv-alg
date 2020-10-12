@@ -14,7 +14,7 @@
 \maketitle
 
 \nextprob
-\collab{TODO}
+\collab{n/a}
 
 You should make at least ten contributions to the Piazza board
 discussing the solutions to Problems in Chapter 5 or 6 of the textbook.  Your
@@ -41,13 +41,29 @@ My contributions are:
             \item Now suppose we root $T$ at an arbitrary vertex $r$. For any vertex $v$, let $T_v$ denote the subtree of $T$ rooted at $v$; for example, $T_r = T$. Let $uv$ be an arbitrary edge of $T$, where $u$ is the parent of $v$. Prove that $uv$ is a bridge of $G$ if and only if $uv$ is the only edge in $G$ with exactly one endpoint in $T_v$ .
             \item Describe a linear-time algorithm to identify every bridge in $G$. [Hint: Let $T$ be a depth-first spanning tree of $G$.]
         \end{enumerate}
-    \item ...
+    \item (Chapter 6 Question 5 at 11:00 am on 10/10/2020). \\
+        For part a, we are given a graph $G$ and and edge $e$. From there, we must determine if $e$ is a bridge for $G$ in linear time. To do this, we can use the following pseudocode.
+
+        \begin{algorithm}
+            IsBridge(G, e) \\
+            $\cdot$ \hspace{1em} src = source(e) \\
+            $\cdot$ \hspace{1em} trg = target(e) \\
+            $\cdot$ \hspace{1em} H = G - e \\
+            $\cdot$ \hspace{1em} dfs(H, src) \\
+            $\cdot$ \hspace{1em} if (trg is not marked in H): \\
+            $\cdot$ \hspace{2em} return True \\
+            $\cdot$ \hspace{1em} return False \\
+        \end{algorithm}
+
+        Every line in the above algorithm (except for $dfs(H, src)$) runs in constant time. We know that first search runs in $O(V + E)$ time so the $IsBridge()$ runs in linear time. The algorithm is correct because depth first search marks all vertices that are reachable from a source vertex. We are running depth first search on the graph H, which does not contain our query edge $e$. So if we do not mark $trg$ in depth first search, then $H$ (which is $G$ without $e$) is disconnected.
+
+        As far as the running time to find all bridges, we must call $IsBridge$ on each edge in the graph $G$. So the runtime is $EO(V + E) = O(EV + E^2)$.
 \end{enumerate}
 
 % ============================================
 
 \nextprob
-\collab{TODO}
+\collab{n/a}
 
 Chapter 4, Question 1 (Greedy Schedule).  I encourage you to think through all 9
 alternative schedules.  However, you only need to hand in two:
@@ -67,7 +83,7 @@ TODO: your answer goes between these lines
 
 
 \nextprob
-\collab{TODO}
+\collab{n/a}
 
 Chapter 4, Question 3 (Interval Covering).
 
@@ -96,7 +112,7 @@ TODO: your answer goes between these lines
 % ============================================
 
 \nextprob
-\collab{TODO}
+\collab{n/a}
 
 Suppose someone poses a problem to you, and you have a hunch that it can be
 solved with a dynamic program.  Describe, in your own words, the steps you will
@@ -114,7 +130,7 @@ TODO: your answer goes between these lines
 
 
 \nextprob
-\collab{TODO}
+\collab{n/a}
 
 Choose one concept or algorithm that you have learned
 in this class so far. Describe it to someone who has
@@ -129,9 +145,9 @@ TODO: your answer goes between these lines
 % ============================================
 
 \nextprob
-\collab{TODO}
+\collab{n/a}
 
-The final course project is to research a ``recent'' video and make a
+The final course project is to research a ``recent'' algorithm and make a
 five-minute video about it.  This semester, I am offering an alternate
 assignment: to give complete (polished) solutions to five algorithms (of a
 choice of 10).
