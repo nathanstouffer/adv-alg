@@ -80,7 +80,64 @@ My contributions are:
         Describe and analyze an algorithm to compute the length of the longest monotonically increasing path with vertices in $S$.
         Assume you have a subroutine $L(x, y, x_0, y_0)$ that returns the length of the segment from $(x, y)$ to $(x_0, y_0)$.
     \item (Chapter 6 Question 15 at 10:40 am on 10/12/2020). \\
-        
+        The problem already gives some description of input.
+        We are given $n$ points in the plane in the form of two arrays: $X[1..n]$ and $Y[1..n]$.
+        Suppose we preprocess the input as follows before calling our algorithm.
+        The function $SortByX$ sorts the array of $X$ coordinates but preserves the parrallel property of the arrays $X$ and $Y$.
+
+        \begin{algorithm}
+            \textsc{LongestPolygonalPath}(X[1..n], Y[1..n]) \\
+            $\cdot $ \hspace{1em} X, Y = SortByX(X, Y) \\
+            $\cdot $ \hspace{1em} L[1..n] = [ -inf, -inf, ..., -inf ] \\
+            $\cdot $ \hspace{1em} return LPP(X, Y, 0)
+        \end{algorithm}
+
+        We can implicitly represent the underlying graph with the following rules. Given an $k$, we can draw an edge from the point $(X[k], Y[k])$ to every point $(X[i], Y[i])$ where $i > k$ and $Y[i] \geq Y[k]$. In words, since $X$ is sorted we can't select any point with index less than $k$. Additionally, we need to check that the point we select does not have a lower $Y$ coordinate than our previous point (this would violate monotonically increasing).
+
+        Now that we have established the underlying graph, we can run the following algorithm. In this algorithm, we compute every possible monotonically increasing sequence and return the path with the longest length. Note that $k$ is the index of the most recently added vertex to the path.
+        \newpage
+        \begin{algorithm}
+            \textsc{LLP}(X, Y, k) \\
+            $\cdot $ \hspace{1em} x = X[k] \\
+            $\cdot $ \hspace{1em} y = Y[k] \\
+            $\cdot $ \hspace{1em} max  = 0 \\
+            $\cdot $ \hspace{1em} test = 0 \\
+            $\cdot $ \hspace{1em} for i in k+1..n // check all possible outgoing edges \\
+            $\cdot $ \hspace{1em} if (Y[i] $\geq$ Y[k])	// make sure edge is monotonically increasing in Y \\
+            $\cdot $ \hspace{2em} test = L(x, y, X[i], Y[i]) + \textsc{LLP}(X, Y, i) \\
+            $\cdot $ \hspace{1em} if  (test $>$ max) \\
+            $\cdot $ \hspace{2em} max = test \\
+            $\cdot $ \hspace{1em} return max
+        \end{algorithm}
+
+        However, this run time is absolutely atrocious. I think this is what happens in the very worst case. The recurrence relation is $T(n) = n * T(O(n-1))$. The $n$ comes from the for loop and the $O(n-1)$ comes from the fact that, in the worst case, only the current point is now ineligible to be a part of the monotonically increasing path. So the run time is $O(n!)$ in the worst case.
+    \item (Chapter 6 Question 15 at TODO on 10/12/2020). \\
+        We can improve on this run time practically (although I am struggling to think of a theoretical improvement).
+        Instead of the preprocessing used above, we should use the following preprocessor function that initializes a global array $L[1..n]$.
+        This array stores the longest discovered path (subject to the constraints) to vertex $i$ in $L[i]$.
+
+        \begin{algorithm}
+        \textsc{LongestPolygonalPath}(X[1..n], Y[1..n]) \\
+            $\cdot$ \hspace{1em} X, Y = SortByX(X, Y) \\
+            $\cdot$ \hspace{1em} L[1..n] = [ -inf, -inf, ..., -inf ] \\
+            $\cdot$ \hspace{1em} return max(L)
+        \end{algorithm}
+
+        Then our algorithm can perform an additional check to see if a longer path to the same vertex has already been discovered.
+
+        \begin{algorithm}
+            $\cdot$ \hspace{1em} LLP(X[1..n], Y[1..n], k) \\
+            $\cdot$ \hspace{1em} x = X[k] \\
+            $\cdot$ \hspace{1em} y = Y[k] \\
+            $\cdot$ \hspace{1em} for i in k+1..n \\
+            $\cdot$ \hspace{2em} if (Y[i] $\geq$ Y[k]) \\
+            $\cdot$ \hspace{3em} if (L[k] + L(x, y, X[i], Y[i]) $>$ L[i]) \\
+            $\cdot$ \hspace{4em} L[i] = L[k] + L(x, y, X[i], Y[i]) \\
+            $\cdot$ \hspace{4em} LLP(X, Y, i)
+        \end{algorithm}
+
+        Practically, this new algorithm will not compute some paths that we know will not be the longest polygonal path because a longer one to the same vertex has already been discovered.
+        However, this does not improve the theoretical bound of $O(n!)$.
 \end{enumerate}
 
 % ============================================
