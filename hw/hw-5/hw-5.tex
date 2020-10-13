@@ -58,6 +58,19 @@ My contributions are:
         Every line in the above algorithm (except for $dfs(H, src)$) runs in constant time. We know that first search runs in $O(V + E)$ time so the $IsBridge()$ runs in linear time. The algorithm is correct because depth first search marks all vertices that are reachable from a source vertex. We are running depth first search on the graph H, which does not contain our query edge $e$. So if we do not mark $trg$ in depth first search, then $H$ (which is $G$ without $e$) is disconnected.
 
         As far as the running time to find all bridges, we must call $IsBridge$ on each edge in the graph $G$. So the runtime is $EO(V + E) = O(EV + E^2)$.
+    \item (Chapter 6 Question 5 at 10:30 pm on 10/12/2020). \\
+        I was thinking that a proof by contradiction would fit nicely here.
+
+        Claim: Let $G$ be a connected graph, and let $T$ be an arbitrary spanning tree of $G$.
+        Every bridge of $G$ is also an edge in $T$.
+
+        Proof: Let $G = (V, E)$ be a connected graph with spanning tree $T = (V_T, E_T)$.
+        Let $e$ be a bridge in $G$.
+        Now suppose that $e$ is not in $T$ ($T \subset G - e$).
+        Since $T$ is a spanning tree, $T$ contains a path from every $u \in V$ to every $v \in V$.
+        But this is a contradiction since $T \subset G - e$ and $G- e$ is disconnected (so some vertices exist with no paths between them).
+        Since we reached a contradiction by assuming that $e$ is not in $T$, that must have been an incorrect assumption.
+        So it must have been true that $e$ is in $T$.
 \end{enumerate}
 
 % ============================================
