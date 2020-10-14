@@ -166,7 +166,89 @@ alternative schedules.  However, you only need to hand in two:
 \paragraph{Answer}
 % ============================================
 
-TODO: your answer goes between these lines
+\begin{enumerate}
+    \item For a greedy scheduler strategy that works, I chose to prove that strategy (h) works.
+    Strategy (h) says Let $x$ be the class with the earliest start time and let $y$ be the class with the second earliest start time:
+    \begin{itemize}
+        \item If $x$ and $y$ are disjoint, choose $x$ and recurse on everything but $x$
+        \item If $x$ completely contains $y$, discard $x$ and recurse
+        \item Otherwise, discard $y$ and recurse
+    \end{itemize}
+    To prove that this algorithm is correct, we must show that each case makes a correct choice and that the algorithm will terminate.
+    Let's begin by showing that the first choice is a correct one.
+    Suppose that $x$ and $y$ are disjoint.
+    This implies that $x$ does not intersect with any other classes (since all other classes start after or equal to when $y$ starts).
+    Since $x$ does not intersect with any other classes, it must be in the optimal schedule.
+    So we should choose $x$ and continue on our way.
+
+    We now show that if $x$ completely contains $y$, that we should discard $x$.
+    If $y$ is contained completely in $x$, then any conflict with $y$ is surely a conflict with $x$.
+    However, the converse is not true so we should discard $x$ because choosing $y$ is at least as good as choosing $x$.
+    Therefore, we should discard $x$.
+
+    Now we consider the final case: discard $y$.
+    If we reach this case, then neither of the previous cases are true.
+    So it must be true that $y$ starts before $x$ ends and that $y$ ends after $x$ ends.
+    Then choosing $x$ is at least as good as choosing $y$ because any class that conflicts with $x$ will conflict with $y$ but the converse is not necessarily true.
+    Therefore, we should discard $y$.
+
+    The algorithm starts with the initial set of classs and then evaluates the pair $x$ and $y$.
+    Note any configuration of the classes $x$ and $y$ must fall into one of the three given cases.
+    After making a decision and acting (either choosing or discarding), the algorithm is called recursively on the remainder.
+    Let's now prove that this algorithm terminates.
+    Let our state space be the set of classes that are not chosen or discarded; we map this set to the natural numbers via cardinality.
+    The function is strictly decreasing over each step in the recursion because each case either chooses or discards a class and every configuration of classes $x$ and $y$ falls into one of the cases.
+    Therefore, at recursive step $i+1$, the cardinality of our state space is one less than that of recursive step $i$, which is strictly decreasing.
+    Thus, the algorithm must terminate.
+
+    Now we must prove the correctness of the entire algorithm.
+    We do so by induction.
+    The base case occurs at the beginning of the algorithm when no choices have been made.
+    Then we make a choice that does not disagree with the optimal schedule (we know what this choice is via the proof of the three cases).
+    Then we have made a single correct choice.
+    For our inductive assumption, suppose that we have recursed $i \geq 1$ times and made a correct choice at each recursion.
+    Now we must show that the $i+1$ recursion does not make an incorrect choice.
+    But we have already shown that the three cases above outline a correct choice.
+    So the $i+1$ choice must be made correctly and the inductive step is proved.
+
+    So we have showed that the algorithm terminates and is correct.
+    \item For an alternate strategy that does not work, I chose strategy (e).
+    This strategy states that we should choose the course $x$ that conflicts with the fewest other courses, discard all classes that conflict with $x$, and recurse.
+    This strategy fails with the following input:
+    \begin{center}
+        \begin{tikzpicture}[scale=1.5]
+            % top 4
+            \draw [thick] (-2.75, 0) -- (-1.5, 0);
+            \draw [thick] (-1.25, 0) -- (0,    0);
+            \draw [thick] (0.25,  0) -- (1.5,  0);
+            \draw [thick] (1.75,  0) -- (3,    0);
+            % middle
+            \draw [thick] (-0.25, -0.25) -- (0.5, -0.25);
+            % left
+            \draw [thick] (-1.75, -0.25) -- (-1, -0.25);
+            \draw [thick] (-1.85, -0.5) -- (-1.1, -0.5);
+            \draw [thick] (-1.65, -0.75) -- (-0.9, -0.75);
+            % right
+            \draw [thick] (2, -0.25) -- (1.25, -0.25);
+            \draw [thick] (2.05, -0.5) -- (1.3, -0.5);
+            \draw [thick] (1.85, -0.75) -- (1.1, -0.75);
+        \end{tikzpicture}
+    \end{center}
+    The optimal schedule is the top 4 classes but this algorithm will select only 3 classes.
+    \item Another algorithm that does not work is (d): choose the course $x$ with the shortest duration, discard all classes that conflict with $x$, and recurse.
+    This fails on the following counterexample:
+    \begin{center}
+        \begin{tikzpicture}[scale=1]
+            % left
+            \draw [thick] (-6, -0.5) -- (-0.25, -0.5);
+            % middle
+            \draw [thick] (-1, 0) -- (1, 0);
+            % right
+            \draw [thick] (0.25, 0.5) -- (6,  0.5);
+        \end{tikzpicture}
+    \end{center}
+    This algorithm will select only the middle class when it should select the other two.
+\end{enumerate}
 
 % ============================================
 
@@ -175,6 +257,13 @@ TODO: your answer goes between these lines
 \collab{n/a}
 
 Chapter 4, Question 3 (Interval Covering).
+
+Let $X$ be a set of $n$ intervals on the real line.
+We say that a subset of intervals $Y \subset X$ covers $X$ if the union of all intervals in $Y$ is equal to the union of all the invtervals in $X$.
+The size of a cover is just the number of intervals.
+Describe and analyze an efficient algorithm to compute the smallest cover of $X$.
+Assume that your input consists of two arrays $L[1..n]$ and $R[1..n]$, representing the left and right endpoints of the intervals in $X$.
+If you use a greedy algorithm, you must prove that it is correct.
 
 This question asks you to come up with an algorithm.  As a reminder, you are
 expected to provide:
@@ -196,7 +285,79 @@ expected to provide:
 \paragraph{Answer}
 % ============================================
 
-TODO: your answer goes between these lines
+\begin{enumerate}
+    \item First, the problem description.
+    We are given a set of $n$ intervals of real numbers $X$.
+    For simplicity's sake in this algorithm, we assume that the intervals are closed and bounded (open intervals could be accommodated with some type of flag in our algorithm).
+    The set of intervals $X$ is presented to our algorithm as two arrays $L[1..n]$ and $R[1..n]$ containing the left and right endpoints of each interval.
+    We make two assumptions about these parallel arrays.
+    First, we assume that $R[i] \geq L[i]$ for all $i \in \{ 1, 2, ..., n \}$.
+    Second, we assume that $L[1..n]$ is sorted in ascending order.
+    If this were not the case, we could sort it in $O(n \log n)$ in the preprocessing function so it will not greatly affect our analysis.
+    The last assumption that we make is that the union of all invtervals in $X$ is a single closed interval $[a,b]$.
+
+    Our task is to compute the smallest cover $Y$ of $X$ where $Y \subset X$.
+    Note that $X$ must have a cover since the set $X \subset X$ is cover of $X$.
+    In our algorithm, we will access the parallet arays $L$ and $R$ using indices, however, for $Y$ we assume that we have a data structure where we can push and pop elements (although we will only push).
+    We will return the set $Y$, the smallest cover of $X$.
+    \item In words, we will use the following greedy algorithm the compute the smallest cover of $X$.
+    We will keep track of the furthest right point that we have covered.
+    Then, given such a point, we will find all intervals that start before this point and end after it (that is all intervals $[a,b]$ such that $right \in [a,b]$).
+    From these intervals, we will select the interval $[a,b]$ with the largest value for $b$.
+    Then we delete all intervals that are already covered and recursively call our function with $b$ as the new value for right.
+
+    As an intuitive reason for why this is correct, we are constrained to select intervals that begin before the value of right (otherwise we would not cover the union of all intervals in $X$) and we may as well select the interval that gets us closest to our end goal.
+    \item Here is the algorithm.
+    \begin{algorithm}
+        \textsc{SmallestCover}($L$, $R$) \\
+        1. \hspace{1em} $Y \gets \emptyset$ \\
+        2. \hspace{1em} right $\gets R[0]$ \\
+        3. \hspace{1em} return \textsc{SmallestCoverRec}($L$, $R$, $Y$, right) \\
+
+        \textsc{SmallestCoverRec}($L$, $R$, $Y$, right) \\
+        1. \hspace{1em} if ($L == \emptyset$) \\
+        2. \hspace{2em}     return $Y$ \\
+        3. \hspace{1em} $a \gets -\infty$ \\
+        4. \hspace{1em} $b \gets -\infty$ \\
+        5. \hspace{1em} while ($L[0] \leq $ right) \\
+        6. \hspace{2em}     if ($R[0] > b$) \\
+        7. \hspace{3em}         $[a,b] \gets [L[0], R[0]]$ \\
+        8. \hspace{2em}     $L \gets L[1:]$ \\
+        9. \hspace{2em}     $R \gets R[1:]$ \\
+        10. \hspace{0.5em} if ($[a,b] \neq [-\infty,-\infty]$) \\
+        11. \hspace{1.5em} $Y.push([a,b])$ \\
+        12. \hspace{0.5em} return \textsc{SmallestCoverRec}($L$, $R$, $Y$, $b$)
+    \end{algorithm}
+    \item We now prove that the algorithm terminates.
+    First we use a decrementing function.
+    Let the state space be the length of the array $L[1..n]$, which is mapped to the natural numbers by the length of the array.
+    Given recursive calls $i$ and $i+1$, we must now show that $|L_{i+1}|$ is strictly less than $|L_i|$.
+    This will certainly be true if line 9 runs at least once in $L_i$.
+    Line 9 will run at least once if $L_i[0] \leq $ right is true when $L_i$ is called.
+    Recall that we required the union of the intervals in $X$ forms a single closed interval $[a,b]$.
+    This implies that every interval overlaps with at least one interval (even if it is just a single point).
+    Then every value for right must greater than or equal to some left endpoint.
+    But why should that endpoint exist at $L_i[0]$?
+    Because the sequence of values right$_i$ is strictly increasing and $L_i$ is sorted in ascending order.
+    Thererfore, the left endpoint that is less than or equal to right$_i$ must exists at $L_i[0]$, which implies that our decrementing function is strictly decreasing and the algorithm terminates.
+
+    As additional proof that the algorithm terminates, we give the run time of the algorithm.
+    Since we have just shown that the while loop must execute at least once in each recursive call, the runtime of this algorithm is $O(n)$ where $n$ is the length of the input arrays $L$ and $R$.
+    \item We now prove partial correctness, that is, we assume that the algorithm terminates and we must show that it is correct.
+    First we will discuss the loop invariant.
+    The loop invariant is quite simple since we are using a while loop.
+    We can just say that the loop invariant is $L[0] \leq$ right.
+    This is certainly true inside the loop since the loop will not run unless it is true.
+
+    Now we move on to discussing the greedy nature of the algorithm.
+    We will show that the greedy algorithm is correct by considering another option.
+    Suppose we are at some point in the execution of algorithm where we must choose between two intervals $[a,b]$ and $[a',b']$ (we already know that $a,a' \leq $ right since we are choosing between them).
+    Without loss of generality, let $b \geq b'$.
+    Since $b \geq b'$, choosing $[a,b]$ preserves all the options from choosing $[a',b']$.
+    That is, choosing $[a,b]$ is at least as good as choosing $[a',b']$.
+    The converse is not necessarily true since restricting ourselves to $[a',b']$ may very well exclude choices in the next iteration.
+    Therefore, the greedy algorithm is an optimal choice.
+\end{enumerate}
 
 % ============================================
 
