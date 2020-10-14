@@ -79,7 +79,7 @@ My contributions are:
         Suppose you are given a set $S$ of $n$ points in the plane, represented as two arrays $X[1 .. n]$ and $Y [1 .. n]$.
         Describe and analyze an algorithm to compute the length of the longest monotonically increasing path with vertices in $S$.
         Assume you have a subroutine $L(x, y, x_0, y_0)$ that returns the length of the segment from $(x, y)$ to $(x_0, y_0)$.
-    \item (Chapter 6 Question 15 at 10:40 am on 10/12/2020). \\
+    \item (Chapter 6 Question 15 at 10:40 am on 10/13/2020). \\
         The problem already gives some description of input.
         We are given $n$ points in the plane in the form of two arrays: $X[1..n]$ and $Y[1..n]$.
         Suppose we preprocess the input as follows before calling our algorithm.
@@ -111,7 +111,7 @@ My contributions are:
         \end{algorithm}
 
         However, this run time is absolutely atrocious. I think this is what happens in the very worst case. The recurrence relation is $T(n) = n * T(O(n-1))$. The $n$ comes from the for loop and the $O(n-1)$ comes from the fact that, in the worst case, only the current point is now ineligible to be a part of the monotonically increasing path. So the run time is $O(n!)$ in the worst case.
-    \item (Chapter 6 Question 15 at TODO on 10/12/2020). \\
+    \item (Chapter 6 Question 15 at 12:40 pm on 10/13/2020). \\
         We can improve on this run time practically (although I am struggling to think of a theoretical improvement).
         Instead of the preprocessing used above, we should use the following preprocessor function that initializes a global array $L[1..n]$.
         This array stores the longest discovered path (subject to the constraints) to vertex $i$ in $L[i]$.
@@ -138,6 +138,15 @@ My contributions are:
 
         Practically, this new algorithm will not compute some paths that we know will not be the longest polygonal path because a longer one to the same vertex has already been discovered.
         However, this does not improve the theoretical bound of $O(n!)$.
+    \item (Chapter 6 Question 15 at 11:40 pm on 10/13/2020). \\
+        Hey Giorgio,
+
+        I am confused as to why the path must be consecutive in the set $S$ (since the listing order in a set is not important).
+        From the problem in the textbook, it seems like we are supposed to find the longest monotonically increasing sequence of points in $S$.
+        It seems like the index $i$ refers to the index in the sequence, not the index of the arrays.
+        The arrays $X$ and $Y$ are just a representation of the set $S$ but it could be put in any order.
+        Let me know what you think.
+    \item (Chapter -- Question -- on 10/14/2020). \\
 \end{enumerate}
 
 % ============================================
