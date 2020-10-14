@@ -146,7 +146,22 @@ My contributions are:
         It seems like the index $i$ refers to the index in the sequence, not the index of the arrays.
         The arrays $X$ and $Y$ are just a representation of the set $S$ but it could be put in any order.
         Let me know what you think.
-    \item (Chapter -- Question -- on 10/14/2020). \\
+    \item (Chapter 6 Question 15 at 2:15 pm on 10/14/2020). \\
+        It is a fair point that the algorithm repeats some calculations. To solve this, we should fill out the array $L$ in an intelligent way. I don't think that my initial algorithm lends itself well to dynamic programming because $L$ doesn't explicitly depend on a recursive call that I can index (as far as I can tell). However, I do think that my algorithm naively uses depth first search instead of breath first search. Most of the time, we consider these algorithms to be the same (maybe we just care about connectivity). In this case, we want to find the maximum length path. Depth first search will compute the length of an entire path, regardless of whether it is the path we care about. On the other hand, breath first search (along with some special conditions about when to stop) would stop searching paths that do not have significant weight (I think).
+    \item (Chapter 6 Question 5 at 2:22 pm on 10/14/2020). \\
+        I can definitely be more specific. Here is my edited version of the proof.
+
+        Claim: Let $G$ be a connected graph, and let $T$ be an arbitrary spanning tree of $G$.
+        Every bridge of $G$ is also an edge in $T$.
+
+        Proof: Let $G=(V,E)$ be a connected graph with spanning tree $T=(V_T,E_T)$.
+        Let $e$ be a bridge in $G$ between vertices $w$ and $w'$ ($e = (w, w')$.
+        Now suppose that $e$ is not in $T$ ($T \subset G - e$).
+        Since $T$ is a spanning tree, $T$ contains a path from every $u \in V$ to every $v \in V$.
+        But this is a contradiction since $T \subset G - e$ and $G - e$ is disconnected (some vertices exist with no paths between them, certainly $w$ and $w'$ are no longer connected since $e$ was their only connection).
+        Since we reached a contradiction by assuming that $e$ is not in $T$, that must have been an incorrect assumption.
+        So it must have been true that $e$ is in $T$.
+    \item (Chapter 6 Question --- at ---- on 10/15/2020). \\
 \end{enumerate}
 
 % ============================================
@@ -373,7 +388,28 @@ choose an example to illustrate working through the process.
 
 % ============================================
 
-TODO: your answer goes between these lines
+So I am given a problem and I think I might be able to use dynamic programming to solve it.
+Here is my general practice for figuring out if dynamic programming will be useful.
+First I will attempt to build a basic recursive solution to the problem.
+When I build my recursive solution, it is important to prove both that the algorithm terminates and that it terminates a correct state.
+Showing that the algorithm terminates might involve proving the run time or showing there is a strictly decreasing decrementing function.
+Showing that the algorithm will terminate in a correct state often involves a loop invariant that remains true at a specific place in the algorithm regardless of the specific recursive call.
+Since the algorithm terminates and the loop invariant is true at every recursive call, the algorithm must terminate in accordance with the loop invariant.
+So long as we choose a useful loop invariant, we will have proved that the algorithm achieves the desired task.
+
+If the recursive solution that I built involves indices, this paragraph can typically be skipped.
+Otherwise, we have this nice recursive solution but no way specific way to memoize the recursive tree.
+In this case, we must reformulate the recursive solution to involve explicit dependencies.
+Something that helps me in this step is building a mathematical recurrence and turning that into the recursive call.
+If we do end up reformulating the recursion tree, we will have to prove correctness again.
+If I have a good handle on the problem, I will just start with this step.
+Sometimes, however, it seems easier just to get any solution rather than one that lends itself well to dynamic programming.
+
+At this stage, we can actually build our dynamic program.
+All we have to do is look at the dependency graph of the recurrence relation/recursive call structure and fill out the elements of the table in the direction of the arrows.
+This will often involve starting at one corner and finishing at the corner we care about, but this is not always the case.
+We do not need to prove the correctness since our algorithm just computes a previously proved correct algorithm in a different order.
+However, it may be a good idea to prove termination by analyzing the runtime so we know how efficient the algorithm is.
 
 % ============================================
 
@@ -382,15 +418,48 @@ TODO: your answer goes between these lines
 \nextprob
 \collab{n/a}
 
-Choose one concept or algorithm that you have learned
-in this class so far. Describe it to someone who has
-taken 232 and 246, but not 432.
+Choose one concept or algorithm that you have learned in this class so far.
+Describe it to someone who has taken 232 and 246, but not 432.
 
 \paragraph{Answer}
 
 % ============================================
 
-TODO: your answer goes between these lines
+The concept that I would explain to some one who has taken 232/246 but not 432 is proving that loops run correctly and terminate.
+I would break my explanation into two parts.
+First, I would discuss proving that a loop terminates and then move on to discussing correctness.
+
+Let's start with termination.
+One reason why it makes sense to prove that a loop terminates before proving that it is correct is because termination is pre-requisite for correctness (if the loop does not terminate it can't be correct).
+There are two ways to prove termination.
+The first is to give an upper bound for the run time to an loop.
+Certainly if the time that a loop runs has an upper bound, it mus terminate.
+The second way is more complex but quite useful.
+It requires defining a state space and a map to the natural numbers (or any well-ordered set but I would probably leave that part out).
+If we can show that each iteration of a loop moves around in the state space such that iteration $i+1$ maps to a natural number strictly less than iteration $i$ then we know the loop must terminate since enough iterations will result in the state space mapping to 1, the smallest natural number.
+This is essentially a fancy way to say that the remaining number of iterations in a loop must be smaller at each iteration.
+
+Now we can start discussing correctness.
+Given an loop, we can verify that it terminates using the methods described in the previous paragraph.
+Now suppose that an loop terminates, we now want to show that the loop achieves the correct goal.
+We can do this by defining four boolean statements $L$ (loop invariant), $G$ (loop guard), $P$ (precondition), and $Q$ (postcondition).
+If these statements satisfy the following implications then the algorithm terminates with $Q$ being true.
+We must have $P \implies L_1$ and $L_i \land G \implies L_{i+1}$ and $L_i \land \lnot G \implies Q$.
+At first this is overwhelming so I would go through an example.
+Let's say we have an array $A[1..n]$ of real numbers and we want to find the largest element of the array.
+Let ``max'' be a variable storing a real number.
+We first set max to $A[1]$, and then we iterate through the array setting max equal to any value larger than the current value of max.
+
+Let $P = $(max = $A[1]$), $L_i = $(max is the largest real number seen at or before index $i$), $G = (i = n)$, and $Q = $(max is the largest element in the array).
+We know that $P$ implies $L_1$ because we are only viewing the array contents at or before index 1, which is the singularity $A[1]$.
+We also know that $L_i \land G \implies L_{i+1}$ because running the loop through another iteration will compare the max seen in $1..i$ with the value at $i+1$ and choose the largest.
+Since greater than is transitive for real numbers, the largest of those two will be the largest number seen in indices $1..i+1$, so the loop invariant holds.
+Then if the loop guard is false, we have stayed in a state where we are keeping track of the largest value seen so far.
+Since the loop guard is $i = n$, we found the largest value in the array.
+Additionally, we know the loop guard will eventually be false because we supposed that the loop terminated.
+
+At a high level, what we just argued is that we kept a certain property true for each iteration of the loop, and, since the algorithm terminates, that property was true when the algorithm terminated as well.
+If we did a good job of choosing our property, we have shown correctness.
 
 % ============================================
 
@@ -404,10 +473,8 @@ choice of 10).
 Please state your preference among the following:
 
 \begin{enumerate}
-    \item You would like to do the standard project, and you know who you want
-        to work with (let us know here).
-    \item You would like to do the standard project, but you would like us to
-        assign your group.
+    \item You would like to do the standard project, and you know who you want to work with (let us know here).
+    \item You would like to do the standard project, but you would like us to assign your group.
     \item You would like to do the alternate assignment instead.
 \end{enumerate}
 
@@ -415,7 +482,7 @@ Please state your preference among the following:
 
 % ============================================
 
-TODO: your answer goes between these lines
+I would like to do that standard project in a group with Kevin Browder, Seth Basetti, and TODO.
 
 % ============================================
 
