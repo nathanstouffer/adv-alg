@@ -3,4 +3,6 @@ textbook/
 *.log
 *.out
 *.synctex.gz
+*.bbl
+*.blg
 *.pdf
