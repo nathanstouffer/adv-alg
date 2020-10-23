@@ -1,0 +1,58 @@
+\section{Algorithm Description}
+
+The algorithm comes in three parts.
+First there is the physical modeling behind each algorithm, then there is the iterative algorithm to compute the positions, and finally there is a multilevel approach that speeds up the algorithm.
+
+\subsection{Physical Modeling}
+
+% physical modeling
+
+One heuristic to reach a ``pretty'' rendering of a graph is to introduce physical force laws to a graph and iterate until the forces no longer provide updates to the positions of the vertices.
+Characterized another way, we define an energy surface and move around in the state space (the positions of all the vertices) until we find a minimum configuration.
+If we have $n$ vertices and we embed the graph in $\R ^2$, then the state space is $\R ^{2n}$ (or $\R ^{3n}$ for graphs depicted in three space).
+Since $n$ can be quite large, we are not guaranteed to find a global minimum on the energy surface, but a local minimum may suffice.
+
+Yifan Hu covers two physically-based methods for defining an energy surface.
+We found the more interesting of the two to be a spring-electric model introduced by Fruchterman and Reingold \cite{fruchterman1991graph}.
+There are two forces defined in this model.
+The first is an attracting spring force between neighbors.
+Given two neighboring vertices $x_i, x_j$, the attracting spring force is given by
+$$ g_s (i,j) = \| x_i - x_j \| / K $$
+where $K$ and $C$ are tuned parameters.
+Note that $g_s (i,j) = 0$ for non-neighboring vertices $x_i, x_j$.
+Hu notes that $K$ and $C$ just scales the energy surface, hence each minima on the energy surface is also just scaled \cite{hu2005efficient}.
+The attracting force brings neighboring vertices together, however, this is balanced by a repelling force between all vertices in the graph (called the electrical force).
+Given any pair of distinct vertices $x_i, x_j$ in the graph, we can compute the repelling force as
+$$ g_e (i,j) = -C K^2 / \| x_i - x_j \| $$
+Then the total force between any pair of vertices is $f (i,j) = g_s(i,j) + g_e (i,j)$.
+The total force on a single vertex $x_i$ can be computed as
+$$ f(i) = \sum _{i \leftrightarrow j} \dfrac{\| x_i - x_j \|}{K} (x_j - x_i) + \sum _{i \neq j} \dfrac{-CK^2}{\| x_i - x_j \|^2} (x_j - x_i) $$
+Using this formula, we can construct an iterative algorithm the updates the positions of the vertices until an equilibria is reached.
+
+\subsection{Iterative Algorithm}
+
+% iterative technique
+
+Since we can compute the local forces on each vertex, we can initialize each vertex of the graph at a random point and the then iteratively update the positions of each vertex according to the applied force.
+We should note that Hu uses a momentum-esque term to escape local minimums.
+The algorithm computes the direction of the force as a unit vector and the magnitude is determined by the step size.
+Step size starts off at a relatively high value and dynamically decreases each iteration by $step_{i+1} = 0.9 * step_i$.
+This will help the algorithm escape local minimums.
+
+\input{code.tex}
+
+Each iteration of the while loop runs in $O (|V|^2)$ time.
+Using the step update rule of multiplying by 0.9 will eventually force the while loop to terminate since the change in the state will decrease as the number of iterations increases.
+Hu also mentions a practical optimization for this algorithm.
+For sufficiently large distances, the combined electric forces of a number of vertices can be approximated with a ``supervertex'' at a center distance.
+The approximation is based on the physical laws used for electric forces.
+Hu achieves this by computing an octtree at line 4 using the initial state and using the center of each square/cube (depending on the dimension) as the center point.
+This reduces the run time of each iteration of the while loop to $O ( |V| \log (|V|))$.
+
+\subsection{Multilevel Approach}
+
+A further optimization of this algorithm is to simplify the underlying graph.
+Hu calls this the Multilevel approach.
+Essentially, an extremely large graph $G$ is simplified into a smaller graph $G'$ such that $G$ can be reconstructed from $G'$.
+Then we can run the above algorithm on $G'$ (which will run much faster) and reconstruct $G$ afterwards.
+This will not necessarily produce the same graph as running the algorithm on $G$ but the resulting graph still looks nice (according to Hu).

@@ -1,6 +1,5 @@
-\section{Pseudo-Code}
-Given two verticies and their locations \\
-$\uvec{u} = \dfrac{(x_j-x_i)}{\|x_j-x_i\|}$
+Given two verticies and their locations, we compute the unit vector between them as $\uvec{u} = \dfrac{(x_j-x_i)}{\|x_j-x_i\|}$.
+Note that $x_0$ denotes the set of vertex coordinates.
 \begin{algorithm}
 	\textsc{ForceDirectedAlgorithm}($G$, $x$, $tol$)\\
 	1.\hspace{1em} converged = FALSE\\
@@ -8,14 +7,14 @@ $\uvec{u} = \dfrac{(x_j-x_i)}{\|x_j-x_i\|}$
 	3.\hspace{1em} while (converged $=$ FALSE) \\
 	4.\hspace{2em} $x_0 = x$\\
 	5.\hspace{2em} for $i \in V$\\
-	6.\hspace{3em} f = 0\\
+	6.\hspace{3em} $f = 0$\\
 	7.\hspace{3em} for each $(i \leftrightarrow j)$ \\
-	8.\hspace{4em} $f : = f + g_s(i, j)\uvec{u}$\\
+	8.\hspace{4em} $f = f + g_s(i, j)\uvec{u}$\\
 	9.\hspace{3em} for $(j \neq i, j \in V)$\\
-	10.\hspace{4em} $f : = f + g_e(i, j)\uvec{u}$\\
-	11.\hspace{3em} $x_i: = x_i + step * (f / \| f \|)$\\
-	12.\hspace{3em} step $:=$ $0.9*$step\\
-	13.\hspace{3em} if $(\|x - x_0\| < tol)$ \\
-	14.\hspace{3em} converged = TRUE\\
-	14.\hspace{2em} return x;
+	10.\hspace{3.5em} $f = f + g_e(i, j)\uvec{u}$\\
+	11.\hspace{2.5em} $x_i = x_i + step * (f / \| f \|)$\\
+	12.\hspace{2.5em} step $=$ $0.9*$step\\
+	13.\hspace{2.5em} if $(\|x - x_0\| < tol)$ \\
+	14.\hspace{3.5em} converged = TRUE\\
+	14.\hspace{1.5em} return x
 \end{algorithm}
