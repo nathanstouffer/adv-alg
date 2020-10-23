@@ -14,6 +14,13 @@
 
 aldfka \cite{hu2005efficient}
 
+\section{Deliverable}
+For our plus one component of this project, we will create a visual presentation of the force-directed graph algorithm. To do this, we will implement the algorithm presented in Hu's paper. Utilizing this algorithm and additional Python packages for visualizations, we will pick 4-5 planar graphs and display the algorithm through its iterations. We chose matplotlib as a Python plotting package to display the graphs throughout iterations. We will begin by plotting each point with matplotlib and iterate through
+the edges drawing lines with matplotlib to create a representation of the graph. Then, using a gif library, each graph can be saved as a frame of the animation. After
+saving an individual frame to the animation, we will update the vertex positions using the "adaptive cooling" algorithm shown in Hu's paper. 
+Each animation will begin with the vertices in a random layout and display the vertices changing positions throughout each iteration of this algorithm as it optimizes the "energy" of the system. The animations will then be included in our presentation as a way of displaying, visually, how this algorithm performs. By having a method of 
+visualizing this algorithm's process, we can use it as an aid to thoroughly explain the actual function and design of the algorithm.
+
 \newpage
 \bibliographystyle{acm}
 \bibliography{P1}
