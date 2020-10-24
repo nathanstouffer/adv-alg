@@ -1,0 +1,25 @@
+\begin{tikzpicture}[scale=2]
+    %% vertices
+    \draw [fill=black] (0.0,0.0)     circle (0.025);
+    \draw [fill=black] (1.0,1.0)     circle (0.025);
+    \draw [fill=black] (2.0,0.0)     circle (0.025);
+    \draw [fill=black] (1.0,-1.0)    circle (0.025);
+    %% labels
+    \node at (0.0,-0.15) {a};
+    \node at (1.15,1.0) {b};
+    \node at (2.15,0.0) {c};
+    \node at (1.15,-1.0) {d};
+    %% weights
+    \node at (0.35,-0.7) {1};
+    \node at (1.65,-0.7) {2};
+    \node at (1,0.15) {3};
+    \node at (0.35,0.7) {4};
+    \node at (1.65,0.7) {5};
+
+    %% edges
+    \draw [thick] (0.088,0.088) -- (0.912,0.912);
+    \draw [thick] (0.125,0.0) -- (1.875,0.0);
+    \draw [thick] (0.088,-0.088) -- (0.912,-0.912);
+    \draw [thick] (1.088,0.912) -- (1.912,0.088);
+    \draw [thick] (1.912,-0.088) -- (1.088,-0.912);
+\end{tikzpicture}
