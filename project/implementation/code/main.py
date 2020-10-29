@@ -2,7 +2,8 @@
 
 from sys import argv
 import graph
-import networkx as nx
+import networkx as nx # mayb try pygraphvis
+import matplotlib.pyplot as plt
 
 script, file_name = argv
 
@@ -10,4 +11,5 @@ script, file_name = argv
 g = graph.Graph(file_name)
 print(g)
 
-nx.draw(g.nx_graph())#, pos=g.positions())
+nx.draw(g.nx_graph(), pos=g.positions(), node_size=100, node_color='g')
+plt.show()
