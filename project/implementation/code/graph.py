@@ -20,7 +20,11 @@ class Graph:
 
     # method to return the positions of the vertices in a dictionary format (for displaying the graph)
     def positions(self):
-        pass
+        pos = {}
+        for key in self.verts:
+            vert = self.verts[key]
+            pos[vert.id] = [vert.x, vert.y]
+        return pos
 
     # method to return the immediate neighbors of a vertex
     def neighbors(self, vert):
@@ -28,7 +32,11 @@ class Graph:
 
     # method to return the nxGraph object to be displayed to the screen
     def nx_graph(self):
-        pass
+        g = nx.Graph()
+        for key in self.verts:
+            for trg in self.edges[key]:
+                g.add_edge(key, trg)
+        return g
 
     def __str__(self):
         ret  = "Graph: " + self.name
