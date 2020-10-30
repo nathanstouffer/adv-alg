@@ -23,7 +23,7 @@ class Vector2:
         return Vector2(scalar*self.x, scalar*self.y)
 
     # other must be of type Vector2
-    def __plus__(self, other):
+    def __add__(self, other):
         return Vector2(self.x+other.x, self.y+other.y)
 
     # other must be of type Vector2
