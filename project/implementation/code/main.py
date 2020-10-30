@@ -4,6 +4,11 @@ from sys import argv
 import graph
 import networkx as nx
 import matplotlib.pyplot as plt
+from vector2 import *
+
+#Parameters to tune for electric force calculations
+C = 1
+K = 1
 
 # function to compute the magnitude of the spring force between u and v
 def spring_force_mag(g, u, v):
@@ -32,12 +37,14 @@ def force_directed(g, to1):
         for vert in g.verts:
             f = Vector2(0, 0)
             for adj_vert in g.edges[vert]:
-                f += spring_force_mag(g, vert, adj_vert) * unit_vec(g, vert, adj_vert)
+                f += unit_vec(g, vert, adj_vert).scale(spring_force_mag(g, vert, adj_vert))
             for other_vert in g.verts:
                 if other_vert != vert:
-                    f += electric_force_mag(g, vert, other_vert) * unit_vec(g, vert, other_ver)
+                    f += unit_vec(g, vert, other_vert).scale(electric_force_mag(g, vert, other_vert))
 
-            x[vert] += step * f.normalize()
+            #x[vert] += f.normalize().scale(step)
+            print(f.normalize().scale(step))
+            print(x)
         step = .9 * step
         break
     return x
@@ -48,6 +55,6 @@ script, file_name = argv
 g = graph.Graph(file_name)
 #print(g)
 #print(g.distance('1','3'))
-
+x = force_directed(g, 5)
 nx.draw(g.nx_graph(), pos=g.positions(), node_size=50, node_color='g', width=0.1)
 plt.show()
