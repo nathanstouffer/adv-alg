@@ -7,11 +7,19 @@ import matplotlib.pyplot as plt
 
 # function to compute the magnitude of the spring force between u and v
 def spring_force_mag(g, u, v):
-    pass
+    u_pos = g.verts[u].pos
+    v_pos = g.verts[v].pos
+    diff  = v_pos - u_pos
+    mag   = diff.mag()
+    return (mag*mag) / K
 
 # function to compute the magnitude of the spring force between u and v
 def electric_force_mag(g, u, v):
-    pass
+    u_pos = g.verts[u].pos
+    v_pos = g.verts[v].pos
+    diff  = v_pos - u_pos
+    mag   = diff.mag()
+    return -(C*K*K) / mag
 
 # function to compute the unit vector between s and t
 def unit_vec(g, s, t):
