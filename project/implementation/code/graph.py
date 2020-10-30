@@ -3,6 +3,7 @@
 
 import networkx as nx
 import vertex
+import vector2
 import math
 
 class Graph:
@@ -17,16 +18,15 @@ class Graph:
 
     # method to compute the euclidean distance between two vertices
     def distance(self, src, trg):
-        diff = [self.verts[trg].x - self.verts[src].x, self.verts[trg].y - self.verts[src].y]
-        dist = diff[0]*diff[0] + diff[1]*diff[1]
-        return math.sqrt(dist)
+        diff = self.verts[trg].pos - self.verts[src].pos
+        return diff.mag()
 
     # method to return the positions of the vertices in a dictionary format (for displaying the graph)
     def positions(self):
         pos = {}
         for key in self.verts:
             vert = self.verts[key]
-            pos[vert.id] = [vert.x, vert.y]
+            pos[vert.id] = [vert.x(), vert.y()]
         return pos
 
     # method to return the immediate neighbors of a vertex
@@ -74,8 +74,9 @@ class Graph:
         id   = vert[0]
         x    = float(vert[1])
         y    = float(vert[2])
-        self.verts[id] = vertex.Vertex(id, x, y)                            # store vertex
-        self.edges[id] = []                                                 # set up adjacency list
+        pos  = vector2.Vector2(x, y)
+        self.verts[id] = vertex.Vertex(id, pos)                                 # store vertex
+        self.edges[id] = []                                                     # set up adjacency list
 
     # method to process an edge line from the input file
     def process_edge_line(self, edge):
