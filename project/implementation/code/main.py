@@ -21,6 +21,27 @@ def unit_vec(g, s, t):
     diff  = t_pos - s_pos
     return diff.normalize()
 
+#Force directed algorithm that updates vertex positions until converged
+def force_directed(g, to1):
+    init_step_length = 10
+    converged = False
+    step = init_step_length
+    
+    while not converged:
+        x = g.positions()
+        for vert in g.verts:
+            f = Vector2(0, 0)
+            for adj_vert in g.edges[vert]:
+                f += spring_force_mag(g, vert, adj_vert) * unit_vec(g, vert, adj_vert)
+            for other_vert in g.verts:
+                if other_vert != vert:
+                    f += electric_force_mag(g, vert, other_vert) * unit_vec(g, vert, other_ver)
+
+            x[vert] += step * f.normalize()
+        step = .9 * step
+        break
+    return x
+
 script, file_name = argv
 
 # TEST CODE
