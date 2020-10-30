@@ -3,6 +3,7 @@
 
 import networkx as nx
 import vertex
+import math
 
 class Graph:
 
@@ -15,8 +16,10 @@ class Graph:
 # PUBLIC METHODS ---------------------------------------------------------------
 
     # method to compute the euclidean distance between two vertices
-    def dist(self, src, trg):
-        pass
+    def distance(self, src, trg):
+        diff = [self.verts[trg].x - self.verts[src].x, self.verts[trg].y - self.verts[src].y]
+        dist = diff[0]*diff[0] + diff[1]*diff[1]
+        return math.sqrt(dist)
 
     # method to return the positions of the vertices in a dictionary format (for displaying the graph)
     def positions(self):
@@ -58,18 +61,26 @@ class Graph:
         self.verts = {}                                                         # set up a dictionary for the vertices
         self.edges = {}                                                         # set up a dictionary for the edges
         for i in range(0, self.num_verts):                                      # initialize vertex storage
-            vert = fin.readline().rstrip().split()                              # read in a vertex
-            id   = vert[0]
-            x    = float(vert[1])
-            y    = float(vert[2])
-            self.verts[id] = vertex.Vertex(id, x, y)                            # store vertex
-            self.edges[id] = []                                                 # set up adjacency list
+            line = fin.readline().rstrip().split()                              # read in a vertex
+            self.process_vert_line(line)
         self.num_edges = int(fin.readline().rstrip().split()[1])                # get the number of edges in the graph
         for i in range(0, self.num_edges):                                      # set up the edges
-            edge = fin.readline().rstrip().split()                              # read in an edge
-            u    = edge[0]
-            v    = edge[1]
-            if (v not in self.edges[u]):                                        # test if the edge is stored in the graph (undirected so symmetry is assumed)
-                self.edges[u].append(v)
-                self.edges[v].append(u)
+            line = fin.readline().rstrip().split()                              # read in an edge
+            self.process_edge_line(line)
         fin.close()
+
+    # method to process a vertex line from the input file
+    def process_vert_line(self, vert):
+        id   = vert[0]
+        x    = float(vert[1])
+        y    = float(vert[2])
+        self.verts[id] = vertex.Vertex(id, x, y)                            # store vertex
+        self.edges[id] = []                                                 # set up adjacency list
+
+    # method to process an edge line from the input file
+    def process_edge_line(self, edge):
+        u    = edge[0]
+        v    = edge[1]
+        if (v not in self.edges[u]):                                        # test if the edge is stored in the graph (undirected so symmetry is assumed)
+            self.edges[u].append(v)
+            self.edges[v].append(u)

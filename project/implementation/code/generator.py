@@ -3,6 +3,9 @@
 import random
 from sys import argv
 
+def make_key(i, j):
+    return str(i) + "," + str(j)
+
 # we assume prob is in [0,1]
 def make_graph(num, prob):
     ret = "V " + str(num)
@@ -11,16 +14,16 @@ def make_graph(num, prob):
         x = max*random.random()
         y = max*random.random()
         ret += "\n" + str(i) + " " + str(x) + " " + str(y)
-    edges = []
+    edges = {}
     for i in range(0, num):                                                     # create the edges
         for j in range(0, num):
             if (i != j):
                 if (random.random() < prob):
-                    if ([i, j] not in edges and [j, i] not in edges):
-                        edges.append([i, j])
+                    if (make_key(i,j) not in edges and make_key(j,i) not in edges):
+                        edges[make_key(i,j)] = [i, j]
     ret += "\nE " + str(len(edges))                                             # add the edges to the output string
-    for edge in edges:
-        ret += "\n" + str(edge[0]) + " " + str(edge[1])
+    for key in edges:
+        ret += "\n" + str(edges[key][0]) + " " + str(edges[key][1])
     return ret
 
 script, num, prob, file_name = argv
