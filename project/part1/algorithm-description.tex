@@ -16,17 +16,18 @@ Yifan Hu covers two physically-based methods for defining an energy surface.
 We found the more interesting of the two to be a spring-electric model introduced by Fruchterman and Reingold \cite{fruchterman1991graph}.
 There are two forces defined in this model.
 The first is an attracting spring force between neighbors.
-Given two neighboring vertices $x_i, x_j$, the attracting spring force is given by
-$$ g_s (i,j) = \| x_i - x_j \| / K $$
+Given two neighboring vertices $x_i, x_j$, the magnitude of the attracting spring force is given by
+$$ g_s (i,j) = \| x_i - x_j \|^2 / K $$
 where $K$ and $C$ are tuned parameters.
 Note that $g_s (i,j) = 0$ for non-neighboring vertices $x_i, x_j$.
 Hu notes that $K$ and $C$ just scales the energy surface, hence each minima on the energy surface is also just scaled \cite{hu2005efficient}.
 The attracting force brings neighboring vertices together, however, this is balanced by a repelling force between all vertices in the graph (called the electrical force).
-Given any pair of distinct vertices $x_i, x_j$ in the graph, we can compute the repelling force as
+Given any pair of distinct vertices $x_i, x_j$ in the graph, we can compute the magnitude of the repelling force as
 $$ g_e (i,j) = -C K^2 / \| x_i - x_j \| $$
-Then the total force between any pair of vertices is $f (i,j) = g_s(i,j) + g_e (i,j)$.
+Both forces act in the direction of the unit vector $\uvec{u}_{ij}$ from $x_i$ to $x_j$.
+Then the total force between any pair of vertices is $f (i,j) = g_s(i,j) \uvec{u}_{ij} + g_e (i,j) \uvec{u}_{ij}$.
 The total force on a single vertex $x_i$ can be computed as
-$$ f(i) = \sum _{i \leftrightarrow j} \dfrac{\| x_i - x_j \|}{K} (x_j - x_i) + \sum _{i \neq j} \dfrac{-CK^2}{\| x_i - x_j \|^2} (x_j - x_i) $$
+$$ f(i) = \sum _{i \leftrightarrow j} \dfrac{\| x_i - x_j \|^2}{K} \uvec{u}_{ij} + \sum _{i \neq j} \dfrac{-CK^2}{\| x_i - x_j \|} \uvec{u}_{ij} $$
 Using this formula, we can construct an iterative algorithm the updates the positions of the vertices until an equilibria is reached.
 
 \subsection{Iterative Algorithm}
