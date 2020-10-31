@@ -33,6 +33,7 @@ def force_directed(g, to1):
     step = init_step_length
     
     while not converged:
+        delta = 0
         x = g.positions()
         for vert in g.verts:
             f = Vector2(0, 0)
@@ -42,11 +43,16 @@ def force_directed(g, to1):
                 if other_vert != vert:
                     f += unit_vec(g, vert, other_vert).scale(electric_force_mag(g, vert, other_vert))
 
-            #x[vert] += f.normalize().scale(step)
-            print(f.normalize().scale(step))
-            print(x)
+            if f.mag() != 0:
+                g.verts[vert].pos += f.normalize().scale(step)
+                delta += step**2
+
+            print(g.verts[vert].pos)
+
+
+        if math.sqrt(delta) < to1:
+            converged = True
         step = .9 * step
-        break
     return x
 
 script, file_name = argv

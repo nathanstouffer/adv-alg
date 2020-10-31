@@ -13,7 +13,7 @@ class Vector2:
 # PUBLIC METHODS ---------------------------------------------------------------
 
     def normalize(self):
-        return self.scale(self.mag())
+        return self.scale(1/self.mag())
 
     def mag(self):
         dist = self.x*self.x + self.y*self.y
