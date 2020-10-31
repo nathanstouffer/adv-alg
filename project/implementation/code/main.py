@@ -7,6 +7,22 @@ import matplotlib.pyplot as plt
 from vector2 import *
 import subprocess
 
+# ALGORITHM PARAMETERS ---------------------------------------------------------
+
+C = 1
+K = 1
+tol = 0.1
+init_step_length = 1
+
+# FUNCTIONS --------------------------------------------------------------------
+
+def draw_and_save(g, name, show):
+    nx.draw(g.nx_graph(), pos=g.positions(), node_size=25, node_color='g', width=0.1)
+    plt.savefig(outdir + "/" + name + ".png", dpi=600)
+    if (show):
+        plt.show()
+    plt.clf()
+
 # function to compute the magnitude of the spring force between u and v
 def spring_force_mag(g, u, v):
     dist = g.distance(u, v)
@@ -23,12 +39,10 @@ def unit_vec(g, s, t):
     diff  = t_pos - s_pos
     return diff.normalize()
 
-#Force directed algorithm that updates vertex positions until converged
+# force directed algorithm that updates vertex positions until converged
 def force_directed(g, tol):
-    init_step_length = 10
     converged = False
     step = init_step_length
-
     iter = 0
     while not converged:
         delta = 0
@@ -37,19 +51,19 @@ def force_directed(g, tol):
             for adj_vert in g.neighbors(vert):
                 mag = spring_force_mag(g, vert, adj_vert)
                 f = f + unit_vec(g, vert, adj_vert).scale(mag)
+                #print("spring:", mag)
             for other_vert in g.verts:
-                if other_vert != vert:
+                if (other_vert != vert):
                     mag = electric_force_mag(g, vert, other_vert)
                     f = f + unit_vec(g, vert, other_vert).scale(mag)
-            print("mag", f.mag())
+                    #print("electric:", mag)
+            #print("mag", f.mag())
             if (f.mag() != 0):
-                #g.verts[vert].pos += f.normalize().scale(step)
-                #delta += step**2
-                g.verts[vert].pos = g.verts[verts].pos + f
-                delta += f.mag()*f.mag()
-        nx.draw(g.nx_graph(), pos=g.positions(), node_size=50, node_color='g', width=0.1)
-        plt.savefig(outdir + "/" + str(iter) + ".png", dpi=600)
-        plt.clf()
+                g.verts[vert].pos += f.normalize().scale(step)
+                delta += step**2
+                #g.verts[vert].pos = g.verts[vert].pos + f
+                #delta += f.mag()*f.mag()
+        draw_and_save(g, str(iter), False)
         if (math.sqrt(delta) < tol):
             converged = True
         step = 0.9 * step
@@ -57,16 +71,16 @@ def force_directed(g, tol):
         print("iter:", iter, "delta:", delta, flush=True)
     return g
 
+# CODE -------------------------------------------------------------------------
+
 script, file_name = argv
 outdir = "../output/" + file_name.split('/')[-1].split('.')[0]
 
 subprocess.run(['mkdir', outdir])
 
-C = 0.2
-K = 1
-tol = 1
+# RUN THE ALGORITHM ------------------------------------------------------------
+
 g = graph.Graph(file_name)
+draw_and_save(g, "init", False)
 g = force_directed(g, tol)
-nx.draw(g.nx_graph(), pos=g.positions(), node_size=50, node_color='g', width=0.1)
-plt.savefig(outdir + "/converged.png", dpi=1200)
-plt.show()
+draw_and_save(g, "converged", True)
