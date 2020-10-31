@@ -17,4 +17,4 @@ while (run):
         run = False
 
 images.append(imageio.imread(dir + "/converged.png"))
-imageio.mimsave("../gifs" + dir.split("/")[0] + ".gif", images)
+imageio.mimsave("../gifs/" + dir.split("/")[0] + ".gif", images)

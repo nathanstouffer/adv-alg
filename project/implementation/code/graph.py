@@ -31,7 +31,7 @@ class Graph:
 
     # method to return the immediate neighbors of a vertex
     def neighbors(self, vert):
-        return self.verts[vert]
+        return self.edges[vert]
 
     # method to return the nxGraph object to be displayed to the screen
     def nx_graph(self):

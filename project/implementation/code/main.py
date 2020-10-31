@@ -5,10 +5,7 @@ import graph
 import networkx as nx
 import matplotlib.pyplot as plt
 from vector2 import *
-
-#Parameters to tune for electric force calculations
-C = 1
-K = 1
+import subprocess
 
 # function to compute the magnitude of the spring force between u and v
 def spring_force_mag(g, u, v):
@@ -27,40 +24,49 @@ def unit_vec(g, s, t):
     return diff.normalize()
 
 #Force directed algorithm that updates vertex positions until converged
-def force_directed(g, to1):
+def force_directed(g, tol):
     init_step_length = 10
     converged = False
     step = init_step_length
-    
+
+    iter = 0
     while not converged:
         delta = 0
-        x = g.positions()
         for vert in g.verts:
             f = Vector2(0, 0)
-            for adj_vert in g.edges[vert]:
-                f += unit_vec(g, vert, adj_vert).scale(spring_force_mag(g, vert, adj_vert))
+            for adj_vert in g.neighbors(vert):
+                mag = spring_force_mag(g, vert, adj_vert)
+                f = f + unit_vec(g, vert, adj_vert).scale(mag)
             for other_vert in g.verts:
                 if other_vert != vert:
-                    f += unit_vec(g, vert, other_vert).scale(electric_force_mag(g, vert, other_vert))
-
-            if f.mag() != 0:
-                g.verts[vert].pos += f.normalize().scale(step)
-                delta += step**2
-
-            print(g.verts[vert].pos)
-
-
-        if math.sqrt(delta) < to1:
+                    mag = electric_force_mag(g, vert, other_vert)
+                    f = f + unit_vec(g, vert, other_vert).scale(mag)
+            print("mag", f.mag())
+            if (f.mag() != 0):
+                #g.verts[vert].pos += f.normalize().scale(step)
+                #delta += step**2
+                g.verts[vert].pos = g.verts[verts].pos + f
+                delta += f.mag()*f.mag()
+        nx.draw(g.nx_graph(), pos=g.positions(), node_size=50, node_color='g', width=0.1)
+        plt.savefig(outdir + "/" + str(iter) + ".png", dpi=600)
+        plt.clf()
+        if (math.sqrt(delta) < tol):
             converged = True
-        step = .9 * step
-    return x
+        step = 0.9 * step
+        iter += 1
+        print("iter:", iter, "delta:", delta, flush=True)
+    return g
 
 script, file_name = argv
+outdir = "../output/" + file_name.split('/')[-1].split('.')[0]
 
-# TEST CODE
+subprocess.run(['mkdir', outdir])
+
+C = 0.2
+K = 1
+tol = 1
 g = graph.Graph(file_name)
-#print(g)
-#print(g.distance('1','3'))
-x = force_directed(g, 5)
+g = force_directed(g, tol)
 nx.draw(g.nx_graph(), pos=g.positions(), node_size=50, node_color='g', width=0.1)
+plt.savefig(outdir + "/converged.png", dpi=1200)
 plt.show()
