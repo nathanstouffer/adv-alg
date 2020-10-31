@@ -7,5 +7,4 @@ textbook/
 *.blg
 *.pdf
 __pycache__/
-project/implementation/input/*
 project/implementation/output/*
