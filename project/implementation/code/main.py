@@ -12,7 +12,7 @@ import subprocess
 C = 1
 K = 1
 tol = 0.1
-init_step_length = 1
+init_step_length = 5 
 
 # FUNCTIONS --------------------------------------------------------------------
 
