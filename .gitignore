@@ -1,5 +1,6 @@
 textbook/
 *.aux
+*.gif
 *.log
 *.out
 *.synctex.gz
