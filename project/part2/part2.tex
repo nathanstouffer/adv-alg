@@ -1,0 +1,23 @@
+\documentclass{article}
+\usepackage{../../hw/fasy-hw}
+\usepackage{ wasysym }
+\usepackage{amsmath}
+\newcommand{\uvec}[1]{\boldsymbol{\hat{\textbf{#1}}}}
+
+\renewcommand{\hwnum}{1}
+\title{Advanced Algorithms Project, Part 1}
+\author{Nathan Stouffer \and Kevin Browder \and Seth Bassetti}
+\collab{n/a}
+\date{due: 2 November 2020}
+
+\begin{document}
+
+\maketitle
+
+\section{Project Progress}
+We have completed our implementation and visualization of our algorithm. The algorithm comes in two parts. First there is the physical modeling behind each algorithm, then there is the iterative algorithm to compute the positions. We have two methods for computing the physical modeling. One for the spring force and one for the electrical force. Each vertex of the graph has an associated vector which the forces act on. We use the term forces loosely here because the calculated forces directly affect the position instead of acting on the velocity that then affect the positions. This was done to simplify the implementation and won't affect the output. We then have our iteration (outlined in our pseudo code in P1) step. This will iterate until convergence, which is determined by the change in graph state. The convergence is somewhat contrived because the magnitude of the change in position is a value called step size that is defined for each iteration. The value for $step_{i+1}$ is $0.9 * step_i$. Eventually the algorithm will take small enough steps to be called converged, but it may not be at an optimal point on the energy surface. However, this is is how the paper decided convergence as well, so we are following that. Every iteration we save the current state of the graph to a PNG and save it in a folder. Once the algorithm converges we move on to visualization.
+
+Our visualization is quite simple. We have a directory full of PNGs which we then iterate over with a step size. Every iteration we add a frame to our GIF. Once we finish iterating over the PNG folder we have a complete GIF showing the algorithm from start to finish in a very easy to understand visualization. We then run this on multiple different graphs. We have a method to generate graphs based on a few parameters to make that process easier. We need to do a little more tuning to get better visuals but all the functionality is finished. We will submit an example gif to the d2l dropbox along with this report. Gifs do not play nice with pdfs.
+
+
+\end{document}
