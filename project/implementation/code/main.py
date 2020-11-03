@@ -24,7 +24,7 @@ def draw_and_png(g, name, show):
     plt.clf()
 
 def save_graph(g, name):
-    fout = open(outdir + "/" + name + ".out", 'w')
+    fout = open(outdir + "/" + name + ".grph", 'w')
     fout.write(str(g))
     fout.close()
 

@@ -10,7 +10,7 @@ import graph
 
 def save_img(title):
     plt.clf()
-    g = graph.Graph(dir + "/" + title + ".out")
+    g = graph.Graph(dir + "/" + title + ".grph")
     nx.draw(g.nx_graph(), pos=g.positions(), node_size=25, node_color='g', width=0.1)
     plt.savefig(dir + "/" + title + ".png", dpi=600)
 
