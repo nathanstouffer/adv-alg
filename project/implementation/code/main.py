@@ -12,16 +12,21 @@ import subprocess
 C = 1
 K = 1
 tol = 0.1
-init_step_length = 5 
+init_step_length = 5
 
 # FUNCTIONS --------------------------------------------------------------------
 
-def draw_and_save(g, name, show):
+def draw_and_png(g, name, show):
     nx.draw(g.nx_graph(), pos=g.positions(), node_size=25, node_color='g', width=0.1)
     plt.savefig(outdir + "/" + name + ".png", dpi=600)
     if (show):
         plt.show()
     plt.clf()
+
+def save_graph(g, name):
+    fout = open(outdir + "/" + name + ".out", 'w')
+    fout.write(str(g))
+    fout.close()
 
 # function to compute the magnitude of the spring force between u and v
 def spring_force_mag(g, u, v):
@@ -63,7 +68,7 @@ def force_directed(g, tol):
                 delta += step**2
                 #g.verts[vert].pos = g.verts[vert].pos + f
                 #delta += f.mag()*f.mag()
-        draw_and_save(g, str(iter), False)
+        save_graph(g, str(iter))
         if (math.sqrt(delta) < tol):
             converged = True
         step = 0.9 * step
@@ -81,6 +86,6 @@ subprocess.run(['mkdir', outdir])
 # RUN THE ALGORITHM ------------------------------------------------------------
 
 g = graph.Graph(file_name)
-draw_and_save(g, "init", False)
+save_graph(g, "init")
 g = force_directed(g, tol)
-draw_and_save(g, "converged", True)
+save_graph(g, "converged")

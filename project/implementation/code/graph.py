@@ -42,13 +42,18 @@ class Graph:
         return g
 
     def __str__(self):
-        ret  = "Graph: " + self.name
-        ret += "\nVertices"
+        ret = "V " + str(self.num_verts)
         for key in self.verts:
             ret += "\n" + str(self.verts[key])
-        ret += "\nEdges"
+        ret += "\nE " + str(self.num_edges)
+        marked = {}
         for key in self.edges:
-            ret += "\n" + str(key) + ": " + str(self.edges[key])
+            for edge in self.edges[key]:
+                k = str(key)  + "," + str(edge)
+                r = str(edge) + "," + str(key)
+                if ( (k not in marked) and (r not in marked) ):
+                    marked[k] = True
+                    ret += "\n" + str(key) + " " + str(edge)
         return ret
 
 
@@ -80,8 +85,8 @@ class Graph:
 
     # method to process an edge line from the input file
     def process_edge_line(self, edge):
-        u    = edge[0]
-        v    = edge[1]
+        u = edge[0]
+        v = edge[1]
         if (v not in self.edges[u]):                                        # test if the edge is stored in the graph (undirected so symmetry is assumed)
             self.edges[u].append(v)
             self.edges[v].append(u)

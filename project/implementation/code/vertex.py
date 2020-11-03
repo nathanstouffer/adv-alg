@@ -24,8 +24,8 @@ class Vertex:
         self.pos.y  = y
 
     def __str__(self):
-        ret  = self.id + " --- ("
-        ret += str(self.x()) + "," + str(self.y()) + ")"
+        ret  = self.id + " "
+        ret += str(self.x()) + " " + str(self.y())
         return ret
 
 
