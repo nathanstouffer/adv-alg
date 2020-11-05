@@ -5,8 +5,8 @@
 %% UPDATE these variables:
 \renewcommand{\hwnum}{7}
 \title{Advanced Algorithms, Homework \hwnum}
-\author{TODO-Put Your Name Here}
-\collab{n/a}
+\author{Kevin Browder \and Seth Bassetti \and Nathan Stouffer}
+\collab{Kevin Browder, Seth Bassetti, Nathan Stouffer}
 \date{due: 9 November 2020}
 
 \begin{document}
@@ -39,10 +39,12 @@ expected to provide:
 \end{enumerate}
 
 \nextprob
-\collab{TODO}
+\collab{Kevin Browder, Seth Bassetti, Nathan Stouffer}
 
 Chapter 7, Question 4, Part(a) (Maximum Weight Spanning Tree)
 
+Describe and analyze an algorithm to compute the maximum-weight spanning tree of a given edge-weighted graph.
+
 \paragraph{Answer}
 
 % ============================================
@@ -53,10 +55,18 @@ TODO: your answer goes between these lines
 
 
 \nextprob
-\collab{TODO}
+\collab{Kevin Browder, Seth Bassetti, Nathan Stouffer}
 
 Chapter 8, Question 4, Part(a) (Removing an Edge)
 
+For any edge $e$ in any graph $G$, let $G \setminus e$ denote the graph obtained by deleting $e$ from $G$.
+Suppose we are given a graph $G$ and two vertices $s$ and $t$.
+The replacement paths problem asks us to compute the shortest-path distance from $s$ to $t$ in $G \setminus e$, for every edge $e$ of $G$.
+The output is an array of $E$ distances, one for each edge of $G$.
+
+Suppose $G$ is a directed graph, and the shortest path from vertex $s$ to vertex $t$ passes through every vertex of $G$.
+Describe an algorithm to solve this special case of the replacement paths problem in $O(E \log V)$ time.
+
 \paragraph{Answer}
 
 % ============================================
@@ -66,10 +76,13 @@ TODO: your answer goes between these lines
 % ============================================
 
 \nextprob
-\collab{TODO}
+\collab{Kevin Browder, Seth Bassetti, Nathan Stouffer}
 
 Chapter 10, Question 1, (Feasible Flow)
 
+Let $f$ and $f'$ be two feasible $(s, t)$-flows in a flow network $G$, such that $|f'| > |f|$.
+Prove that there is a feasible $(s, t)$-flow with value $|f'| - |f|$ in the residual network $G_f$.
+
 \paragraph{Answer}
 
 % ============================================
@@ -80,10 +93,19 @@ TODO: your answer goes between these lines
 
 
 \nextprob
-\collab{TODO}
+\collab{Kevin Browder, Seth Bassetti, Nathan Stouffer}
 
 Chapter 10, Question 4, (Opposing Edges)
 
+Let $G$ be a flow network that contains an opposing pair of edges $u \to v$ and $v \to u$, both with positive capacity.
+Let $G'$ be the flow network obtained from $G$ by decreasing the capacities of both of these edge by $\min \{ c(u \to v), c(v \to u) \}$.
+
+\begin{enumerate}[label=(\alph*)]
+    \item Prove that every maximum $(s,t)$-flow in $G'$ is also a maximum $(s,t)$-flow in $G$.
+    \item Prove that every minimum $(s,t)$-cut in $G$ is also a minimum $(s,t)$-cut in $G'$ and vice versa.
+    \item Prove that there is at least one maximum $(s,t)$-flow in $G$ that is not a maximum $(s,t)$-flow in $G'$.
+\end{enumerate}
+
 \paragraph{Answer}
 
 % ============================================
@@ -93,10 +115,15 @@ TODO: your answer goes between these lines
 % ============================================
 
 \nextprob
-\collab{TODO}
+\collab{Kevin Browder, Seth Bassetti, Nathan Stouffer}
 
 Chapter 11, Question 6, (Mini-Golf)
 
+The input consists of the $x,y$ coordinates of the $m$ corneres of the playing field, the $n$ starting points, and the $n$ holes.
+Every hole can be made in a straight shot from it's starting point.
+Assume that you can determine in constant time whether two line segements intersect, given the $x,y$ coordinates of their endpoints.
+Describe and analyze and algorithm to compute a one-to-one correspondence between the starting points and the holes that meets the straight-line requirement, or to report that no such correspondence exists.
+
 \paragraph{Answer}
 
 % ============================================
@@ -106,7 +133,7 @@ TODO: your answer goes between these lines
 % ============================================
 
 \nextprob
-\collab{TODO}
+\collab{Kevin Browder, Seth Bassetti, Nathan Stouffer}
 
 Find an algorithm discussed in a recent news article (over the past 12 months).
 Choose ONE of the following:
@@ -132,7 +159,7 @@ TODO: your answer goes between these lines
 
 
 \nextprob
-\collab{TODO}
+\collab{Kevin Browder, Seth Bassetti, Nathan Stouffer}
 
 Choose an algorithm that you analyzed on a homework in this class (can be this
 HW or a previous one).  Suppose you are a journalist writing about this
