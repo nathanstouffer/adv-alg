@@ -83,7 +83,30 @@ Prove that there is a feasible $(s, t)$-flow with value $|f'| - |f|$ in the resi
 
 % ============================================
 
-Stouff is working on this one
+We must show that there is some feasible $(s,t)$-flow $g$ in the residual network $G_f$ that takes on the value $|g| = |f'| - |f|$.
+We will prove this with a contradiction.
+Suppose that there is no flow in $G_f$ that takes on the value $|f'| - |f|$. \parspace
+First note that given a flow $h$ in $G_f$, we can construct a feasible flow $h': E \longrightarrow \R$ where $h'(u \to v) = f(u \to v) + h(u \to v)$ for $G$.
+For $h'$ to be feasible, it must satisfy both the conservation and capacity constraints.
+The function $h'$ is necessarily conservative because it is the sum of $f$ and $h$, both of which satisfy the conservation constraint for $G$ ($f$ by assumption and $h$ since it is a flow over the same vertices as $G$).
+We claim that $h'$ also satisfies capacity.
+Since $h'$ is certainly non-negative since $f$ and $h$ are non-negative, we must only show that $h'(u \to v) \leq c(u \to v)$.
+To this end, note that
+$$ h(u \to v) \leq c_f (u \to v) =
+\begin{cases}
+    c(u \to v) - f(u \to v)  & u \to v \in E \\
+    f(v \to u)               & v \to u \in E \\
+    0                        & otherwise
+\end{cases} $$
+Then we can say that $h'(u \to v) = f(u \to v) + h(u \to v) \leq f(u \to v) + c_f (u \to v)$.
+Since $u \to v \in E$, we also have $f(u \to v) + c_f (u \to v) = f(u \to v) + c(u \to v) - f(u \to v) = c(u \to v)$.
+Therefore, $h'$ also satisfies the capacity constraint and $h'$ is a flow on $G$. \parspace
+We now return to the task at hand.
+Since there is no flow in $G_f$ with value $|f'| - |f|$ there is also no flow in $G_f$ that takes on a value greater than $|f'| - |f|$ (if such a flow existed, we could taper the flow until it had value $|f'| - |f|$ so it cannot exist).
+Then, for every flow $h$ in $G_f$, we must have $|h| < |f'| - |f|$.
+Then the value of every flow for the original graph $G$ must be strictly less than $|f| + |h| = |f| + |f'| - |f| = |f'|$.
+But this is a contradiction since we assumed there existed a flow $f'$ with value $|f'|$.
+Since we found a contradiction when we assumed otherwise, it must be the case that there exists a flow $g$ in the residual network $G_f$ with value $|f'| - |f|$.
 
 % ============================================
 
