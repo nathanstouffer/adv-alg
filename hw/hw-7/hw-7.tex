@@ -135,26 +135,28 @@ We found a counterexample for each of the proposed statements.
     The maximum flow for $G'$ assigns a flow of 5 to the edge $s \to t$ while the maximum flow for $G$ assigns a flow of 10 to the edge $s \to t$.
         \begin{figure}[h]
         \begin{center}
-            \includegraphics[scale=0.1]{img/7-4-a}
+            \includegraphics[scale=0.25]{img/7-4-a}
             \caption{Counterexample for statement (a)}
             \label{fig:7-4-a}
         \end{center}
         \end{figure}
     \item Here is a counterexample for statement (b).
-    For the min cut in $G$, we have $S = \{ s \} $ and $T = \{ u, t \} $ but for $G'$ I would take $S = \{ s, u \} $ and $T = \{ t \}$. I also believe those are the only minimum cuts for their respective graphs and they are not minimum cuts in the other graph.
+    For the min cut in $G$, we have $S = \{ s \} $ and $T = \{ u, t \} $ but for $G'$ I would take $S = \{ s, u \} $ and $T = \{ t \}$.
+    Those are the only minimum cuts for their respective graphs and they are not minimum cuts in the other graph.
         \begin{figure}[h]
         \begin{center}
-            \includegraphics[scale=0.1]{img/7-4-b}
+            \includegraphics[scale=0.08,angle=90]{img/7-4-b}
             \caption{Counterexample for statement (b)}
             \label{fig:7-4-b}
         \end{center}
         \end{figure}
+    \newpage
     \item Here is a counterexample for statement (c).
     The only max flow for $G$ (that does not violate conservation) assigns a flow of 5 to the edges $s \to u$ and $u \to t$ and 0 to all other edges.
     The same max flow exists on the graph $G'$. Since that was the only max flow on $G$ we found a counterexample.
         \begin{figure}[h]
         \begin{center}
-            \includegraphics[scale=0.1]{img/7-4-c}
+            \includegraphics[scale=0.25]{img/7-4-c}
             \caption{Counterexample for statement (c)}
             \label{fig:7-4-c}
         \end{center}
