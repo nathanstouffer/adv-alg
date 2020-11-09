@@ -141,13 +141,81 @@ Chapter 11, Question 6, (Mini-Golf)
 The input consists of the $x,y$ coordinates of the $m$ corneres of the playing field, the $n$ starting points, and the $n$ holes.
 Every hole can be made in a straight shot from it's starting point.
 Assume that you can determine in constant time whether two line segements intersect, given the $x,y$ coordinates of their endpoints.
-Describe and analyze and algorithm to compute a one-to-one correspondence between the starting points and the holes that meets the straight-line requirement, or to report that no such correspondence exists.
+Describe and analyze an algorithm to compute a one-to-one correspondence between the starting points and the holes that meets the straight-line requirement, or to report that no such correspondence exists.
 
 \paragraph{Answer}
 
 % ============================================
 
-TODO: your answer goes between these lines
+\begin{enumerate}
+    \item The goal of this problem is to assign each tee of a mini-golf course to an appropriate hole.
+    Each tee can only finish at one hole and each hole must be the destination of exactly only one tee (the assignment of tees to holes is a bijection).
+    We also require that each hole can be sunk with a straight shot from the starting point. \parspace
+    The mini-golf course is represented as a sequnce of $(x,y)$ pairs stored in an array called $Border[1..b]$.
+    We assume that $Border$ is arranged so that the endpoints of lines on the mini-golf course corrspond to the points at consecutive indices of $Border$.
+    Additionally we assume that there is a line between the first and last entries of $Border$.
+    The final assumption that we make about $Border$ is that connecting consecutive indices with a line forms a closed polygon. \parspace
+    The starting points of the course are $(x,y)$ pairs stored in an array called $Tees[1..n]$ and the holes are $(x,y)$ pairs stored in an array called $Holes[1..n]$.
+    We assume that $|tees| = |holes|$, otherwise it would be a strange golf course.
+    Finally, we assume that every tee and hole has a distinct location inside the polygon formed by the border. \parspace
+    The output will be an array called $matches[1..n]$ with $n$ entries.
+    The $k^{th}$ element of the $matches$ is an integer representing the hole matched with the $k^{th}$ tee. \parspace
+    We assume that we have the following functions $\textsc{Intersect}(p_1, q_1, p_2, q_2)$ and $\textsc{MaxFlow}(G, cap)$.
+    $\textsc{Intersect}$ takes in two pairs of points and returns whether the line between $p_1$ and $p_1$ intersects with the line between $p_2$ and $q_2$.
+    $\textsc{MaxFlow}$ takes in a graph $G$ and a capacity function $cap$ and uses the Ford-Fulkerson to compute the maximum flow for $G$.
+    \item In words, we will solve this problem by forming a special directed graph, solving a max-flow problem on that graph and interpreting the results.
+    First, we describe the graph.
+    In this graph, the set of vertices is $\{ tee_1, tee_2, ... tee_n, hole_1, hole_2, ..., hole_n, s, t \}$ (one for every tee, one for every hole, and then a source and a target).
+    Then, for each $tee_k$, we add an edge to every hole that can be reached with a straight line.
+    Then we add an edge from the source vertex to every tee vertex as well as an edge from every hole vertex to the target vertex.
+    Every edge is assigned capacity 1. \parspace
+    We claim that solving the max-flow problem (using the Ford-Fulkerson algorithm) on this graph tells us a way to assign the tees to holes.
+    We require the Ford-Fulkerson algorithm so that the flow is an integer-valued function.
+    To verify our claim, note that each tee can only send out one unit of flow (since it receives exactly one unit of flow from the source).
+    Additionally, each hole can only send out one unit of flow since its only outgoing edge is to the target with capacity 1.
+    Then the capacity constraint of a flow forces the flow into each target to also be one.
+    Since we are using Ford-Fulkerson, each tee will only be able to send its flow to a single target.
+    If the flow returned from Ford-Fulkerson has capacity less than $n$, then there is no correspondence.
+    If the flow returned from Ford-Fulkerson has capcacity $n$ (which is the only other case), then we match each tee with the hole that it sends its flow to.
+    \item Here is the algorithm:
+    \begin{algorithm}
+        \textsc{GolfCourse}($Border[1..b]$, $Tees[1..n]$, $Holes[1..n]$) \\
+        1. \hspace{1em} $G = (V,E) \gets \textsc{MakeGraph}(Border, Tees, Holes)$ \\
+        2. \hspace{1em} $cap[1..n, 1..n]$   // initialize the capacity function (every entry is 0) \\
+        3. \hspace{1em} for $u \to v \in E$ \\
+        4. \hspace{2em}     $cap[u,v] \gets 1$ \\
+        5. \hspace{1em} $maxflow \gets \textsc{MaxFlow}(G, cap)$ \\
+        6. \hspace{1em} if ($|maxflow| < n$) \\
+        7. \hspace{2em}     return ``No correspondence'' \\
+        8. \hspace{1em} $matches[1..n]$ \\
+        9. \hspace{1em} for $u \to v \in E$ \\
+        10. \hspace{0.6em} if ($maxflow(u \to v) = 1$ and $u \neq s$ and $v \neq t$) \\
+        11. \hspace{1.6em}     $matches[u] = v$ \\
+        12. \hspace{0.6em} return $matches$ \\\\
+
+        \textsc{MakeGraph}($Border[1..b]$, $Tees[1..n]$, $Holes[1..n]$) \\
+        1. \hspace{1em} $V \gets \{ s, t \} \cup \{ tee_k \}_{k=1}^n \cup \{ hole_k \} _{k=1}^n$ \\
+        2. \hspace{1em} $E \gets \{ s \to tee_k) \} _{k=1}^n \cup \{ (hole_k \to t) \} _{k=1}^n $ \\
+        3. \hspace{1em} for $k \in \{ 1, 2, ..., n \} $ \\
+        4. \hspace{2em}     for $j \in \{ 1, 2, ..., n \} $ \\
+        5. \hspace{3em}         if (not \textsc{IntersectBorder}($Border$, $Tees[k]$, $Holes[j]$)) \\
+        6. \hspace{4em}             $E \gets E \cup \{ tee_k \to hole_j \}$ \\
+        7. \hspace{1em} return $(V, E)$ \\\\
+
+        \textsc{IntersectBorder}($Border[1..b]$, $p_1$, $p_2$) \\
+        1. \hspace{1em} for $i \in \{ 1, 2, ..., n-1 \}$ \\
+        2. \hspace{2em}     if ($\textsc{Intersect}(Border[i], Border[i+1], p_1, p_2)$) \\
+        3. \hspace{3em}         return True \\
+        4. \hspace{1em} if ($\textsc{Intersect}(Border[1], Border[n], p_1, p_2)$) \\
+        5. \hspace{2em}     return True \\
+        6. \hspace{1em} return False
+    \end{algorithm}
+    \item Use a decrementing function to prove that algorithm terminates. OR  Give the runtime with justification.
+    \item Prove partial correctness.
+    In other words, if there is a loop or recursion, what is the loop/recursion invariant?
+    Provide the proof.
+    (Note: you only need to do this for the outer-most loop if there are nested loops).
+\end{enumerate}
 
 % ============================================
 
