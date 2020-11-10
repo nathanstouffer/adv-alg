@@ -116,9 +116,8 @@ Since we found a contradiction when we assumed otherwise, it must be the case th
 
 Chapter 10, Question 4, (Opposing Edges)
 
-Let $G$ be a flow network that contains an opposing pair of edges $u \to v$ and $v \to u$, both with positive capacity.
-Let $G'$ be the flow network obtained from $G$ by decreasing the capacities of both of these edge by $\min \{ c(u \to v), c(v \to u) \}$.
-
+Let $G$ be a flow network that contains an opposing pair of edges $u \to v, v \to u$, with positive capacity.
+Let $G'$ be the flow network obtained from $G$ by decreasing the capacities of both edges by $\min \{ c(u \to v), c(v \to u) \}$.
 \begin{enumerate}[label=(\alph*)]
     \item Prove that every maximum $(s,t)$-flow in $G'$ is also a maximum $(s,t)$-flow in $G$.
     \item Prove that every minimum $(s,t)$-cut in $G$ is also a minimum $(s,t)$-cut in $G'$ and vice versa.
@@ -129,17 +128,32 @@ Let $G'$ be the flow network obtained from $G$ by decreasing the capacities of b
 
 % ============================================
 
-We found a counterexample for each of the proposed statements.
+On Piazza, Brittany said there are issues with the above statements.
+Instead, we should just prove the following statement.
+Let $G = (V, E, c)$ be a flow network and $f: E \longrightarrow \R$ be a flow on $G$ such that there exist two vertices $u, v \in V$ with $f(u, v) > f(v, u) > 0$.
+Show that the function $f': E \longrightarrow \R$ defined by $f'(u,v) = f(u,v) - f(v,u)$ if $f'(v,u) = 0$ and $f'(e) = f(e)$ otherwise. \parspace
+We are given a valid flow $f$ and we are being asked to show that reducing the flow by a constant amount on a pair of opposing edges  $u \to v, v \to u$ still admits a valid flow $f'$.
+Incidentally, the constant amount is $\min \{ f(u \to v), f(v \to u) \}$.
+To prove this, note that we assumed $f$ to be a valid flow.
+Then $f$ satisfies both the capacity and conservation constraints.
+If an edge $e$ is not $u \to v, v \to u$ then $f'(e) = f(e)$ so the capacity and conservation constraints are met for most of the graph.
+We now only need verify that both constraints hold for $u \to v$ and $v \to u$.
+Capacity certainly holds because $f'(u \to v) = f(u \to v) - \min \{ f(u \to v), f(v \to u) \}$ and $f'(v \to u) = f(v \to u) - min \{ f(u \to v), f(v \to u) \}$.
+So the result of each must be greater than or equal to 0 and is certainly less than the capacity of either (since $f(\cdot)$ is already less than the capacity).
+Conservation holds for $f$ and $f'$ only adjusts the flow on the opposing edges $u \to v$ and $v \to u$.
+The input flow and the output flow are both decreased by $\min \{ f(u \to v), f(v \to u) \}$ so $f'$ is conserved.
+We also found a counterexample for each of the proposed statements.
 \begin{enumerate}[label=(\alph*)]
     \item Here is a counterexample for statement (a).
     The maximum flow for $G'$ assigns a flow of 5 to the edge $s \to t$ while the maximum flow for $G$ assigns a flow of 10 to the edge $s \to t$.
         \begin{figure}[h]
         \begin{center}
-            \includegraphics[scale=0.25]{img/7-4-a}
+            \includegraphics[scale=0.19]{img/7-4-a}
             \caption{Counterexample for statement (a)}
             \label{fig:7-4-a}
         \end{center}
         \end{figure}
+    \newpage
     \item Here is a counterexample for statement (b).
     For the min cut in $G$, we have $S = \{ s \} $ and $T = \{ u, t \} $ but for $G'$ I would take $S = \{ s, u \} $ and $T = \{ t \}$.
     Those are the only minimum cuts for their respective graphs and they are not minimum cuts in the other graph.
@@ -150,7 +164,6 @@ We found a counterexample for each of the proposed statements.
             \label{fig:7-4-b}
         \end{center}
         \end{figure}
-    \newpage
     \item Here is a counterexample for statement (c).
     The only max flow for $G$ (that does not violate conservation) assigns a flow of 5 to the edges $s \to u$ and $u \to t$ and 0 to all other edges.
     The same max flow exists on the graph $G'$. Since that was the only max flow on $G$ we found a counterexample.
@@ -201,12 +214,7 @@ Describe and analyze an algorithm to compute a one-to-one correspondence between
     Then, for each $tee_k$, we add an edge to every hole that can be reached with a straight line.
     Then we add an edge from the source vertex to every tee vertex as well as an edge from every hole vertex to the target vertex.
     Every edge is assigned capacity 1. \parspace
-    We claim that solving the max-flow problem (using the Ford-Fulkerson algorithm) on this graph tells us a way to assign the tees to holes.
-    We require the Ford-Fulkerson algorithm so that the flow is an integer-valued function.
-    To verify our claim, note that each tee can only send out one unit of flow (since it receives exactly one unit of flow from the source).
-    Additionally, each hole can only send out one unit of flow since its only outgoing edge is to the target with capacity 1.
-    Then the capacity constraint of a flow forces the flow into each target to also be one.
-    Since we are using Ford-Fulkerson, each tee will only be able to send its flow to a single target.
+    Then we solve the max-flow problem for this graph using the Ford-Fulkerson algorithm and interpret the results.
     If the flow returned from Ford-Fulkerson has capacity less than $n$, then there is no correspondence.
     If the flow returned from Ford-Fulkerson has capcacity $n$ (which is the only other case), then we match each tee with the hole that it sends its flow to.
     \item Here is the algorithm:
@@ -221,8 +229,8 @@ Describe and analyze an algorithm to compute a one-to-one correspondence between
         7. \hspace{2em}     return ``No correspondence'' \\
         8. \hspace{1em} $matches[1..n]$ \\
         9. \hspace{1em} for $u \to v \in E$ \\
-        10. \hspace{0.6em} if ($maxflow(u \to v) = 1$ and $u \neq s$ and $v \neq t$) \\
-        11. \hspace{1.6em}     $matches[u] = v$ \\
+        10. \hspace{1.6em} if ($maxflow(u \to v) = 1$ and $u \neq s$ and $v \neq t$) \\
+        11. \hspace{2.6em}     $matches[u] = v$ \\
         12. \hspace{0.6em} return $matches$ \\\\
 
         \textsc{MakeGraph}($Border[1..b]$, $Tees[1..n]$, $Holes[1..n]$) \\
@@ -242,11 +250,25 @@ Describe and analyze an algorithm to compute a one-to-one correspondence between
         5. \hspace{2em}     return True \\
         6. \hspace{1em} return False
     \end{algorithm}
-    \item Use a decrementing function to prove that algorithm terminates. OR  Give the runtime with justification.
-    \item Prove partial correctness.
-    In other words, if there is a loop or recursion, what is the loop/recursion invariant?
-    Provide the proof.
-    (Note: you only need to do this for the outer-most loop if there are nested loops).
+    \item We prove that our algorithm terminates by showing that it has a finite run time.
+    First note that \textsc{IntersectBorder} has a finite run time because it loops over a finite set of natural numbers.
+    Also note theat \textsc{MakeGraph} has a finite run time because it is a nested for loop over two finite sets of natural numbers.
+    Then the original \textsc{GolfCourse} algorithm has a finite run time.
+    \textsc{GolfCourse} it constructs the graph $G$ in finite time on line 1 and has finite loops through line 4 (the number of edges is surely finite).
+    Line 5 must be finite because the Ford-Fulkerson Max Flow algorithm runs in finite time.
+    Then lines 6-8 are all constant operations.
+    Line 9 is for loop over a finite set of edges and line 12 runs in constant time.
+    Therefore \textsc{GolfCourse} must have finite run time and terminate.
+    \item Proving correctness for this algorithm is different than the rest of the algorithms in this course.
+    We proved solved this algorithm with a reduction to max flow, so we will prove that solving the max flow problem on the graph we construct solves the mini golf course problem. \parspace
+    We claim that solving the max-flow problem (using the Ford-Fulkerson algorithm) on this graph tells us a way to assign the tees to holes.
+    We require the Ford-Fulkerson algorithm so that the flow is an integer-valued function (the integrality theorem from the textbook guarantees integer-valued).
+    To verify our claim, note that each tee-vertex can only send out one unit of flow (since it receives exactly one unit of flow from the source).
+    Additionally, each hole-vertex can only send out one unit of flow since its only outgoing edge is to the target with capacity 1.
+    Then the capacity constraint of a flow forces the flow into each hole-vertex to also be one. \parspace
+    Since we are using Ford-Fulkerson, each tee will only be able to send its flow to a single target.
+    If the flow returned from Ford-Fulkerson has capacity less than $n$, then there is no correspondence because the maximum flow was not able to reach every tee from the source.
+    If the flow returned from Ford-Fulkerson has capcacity $n$ (which is the only other case), then we match each tee with the hole that it sends its flow to and we have a correspondence.
 \end{enumerate}
 
 % ============================================
