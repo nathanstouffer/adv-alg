@@ -1,0 +1,38 @@
+\documentclass{article}
+\usepackage{../../../hw/fasy-hw}
+\usepackage{ wasysym }
+\usepackage{amsmath}
+\newcommand{\uvec}[1]{\boldsymbol{\hat{\textbf{#1}}}}
+
+\renewcommand{\hwnum}{1}
+\title{Advanced Algorithms Project -- Contributions}
+\author{Nathan Stouffer}
+\collab{n/a}
+\date{due: 16 November 2020}
+
+\begin{document}
+
+\maketitle
+
+Our project was an iterative algorithm that computes a layout for displaying a graph.
+The general structure of the algorithm was to apply forces to the vertices in an iterative manner and wait until convergence.
+My contributions to our algorithms project was the following:
+\begin{itemize}
+    \item read through the paper
+    \item do my best to understand the paper
+    \item help with the implementation
+    \item make some sweet gifs
+    \item help with the video
+\end{itemize}
+I think the strengths of our project are the visualizations of the graphs converging.
+We made a bunch of gifs with some different graphs and it is pretty cool to watch the graphs go from some random tangled state to a pretty pleasing output format.
+The weakest part of our project is that the algorithm does not work on all graphs.
+It seems to do really well on star-shaped graphs, fully connected graphs, and lattice graphs, but not so well on a circle graph and some other types.
+\parspace
+If we were to do this project again, I would want to try out other methods for determining the ``step size'' that our algorithm took.
+The algorithm described by the paper kind of had contrived convergence.
+Basically, it set an initial step size and forced every vertex to move at that step size and then it reduced the step size.
+Then, of course the algorithm will eventually converge, because we are always decreasing the step size.
+I think it would have been nice to explore other methods of updating the step size to see of the algorithm could have found a better layout.
+
+\end{document}
